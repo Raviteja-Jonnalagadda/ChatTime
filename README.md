@@ -18,5 +18,5 @@ The current focus is on implementing core messaging capabilities, specifically e
 
 ## License
 
-This project includes a GUI licensed under 
+This project includes a GPL-3.O licensed under 
 
