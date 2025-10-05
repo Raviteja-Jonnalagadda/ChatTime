@@ -47,7 +47,7 @@
       <ul id="menu"></ul>
     </div>
 
-<iframe class="chat-area" id="ctap_main_frame" src="<%= request.getContextPath() %>/chatlist" value="" title="Chat Area"></iframe>
+<iframe class="chat-area" id="ctap_main_frame" src="<%= request.getContextPath() %>/CTAP_WelcomePage" value="" title="Chat Area"></iframe>
   </div>
 
   <!-- Footer -->

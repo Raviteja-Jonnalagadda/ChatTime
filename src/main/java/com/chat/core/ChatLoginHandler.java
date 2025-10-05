@@ -2,6 +2,7 @@ package com.chat.core;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -77,6 +78,8 @@ public class ChatLoginHandler {
 				cd.setLoginstatus(unam+"~DONE");
 				String ckval = cd.getLoginstatus();
 				System.out.println("done : "+ckval);
+				cd.setUserid(unam);
+				cd.setLogintime(LocalDateTime.now());
 				return "DONE~"+unam;
 				
 			} else {

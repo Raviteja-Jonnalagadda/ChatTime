@@ -52,7 +52,7 @@ public class RedirectionController {
 			}
 		} else {
 			System.err.println("Unidentified Login Status -->  " + unm);
-			return "CTMF";
+			return "UnIdentifiedLogin";
 		}
 	}
 	
@@ -69,7 +69,7 @@ public class RedirectionController {
 		}
 		if(!jo.has("pname")||!jo.has("pdata")) {
 			System.err.println("[RedirectionController] [AllRedirection] pname or pdata node is missing in the recived json -->  "+jo.toString(2));
-			return "Invalid_Redirection";
+			return "UnIdentifiedLogin";
 		}
 		String pagename = jo.optString("pname","NO_DATA");
 		String passdata = jo.optString("pdata","NO_DATA");
@@ -79,25 +79,26 @@ public class RedirectionController {
 		}
 		System.out.println("[RedirectionController] [AllRedirection] The recived pagename is ---> [ "+pagename+" ] "
 				+ " The data that need to pass to that page is ---> [ "+passdata+" ]");
-		switch(pagename) {
-		case "DSB_WelcomePage":
-			System.out.println("[RedirectionController] [AllRedirection] Redirecting to the Welcome.jsp");
-			return "Welcome";
-		case "Chats":
-			System.out.println("[RedirectionController] [AllRedirection] Redirecting to the ctap_ChatList.jsp");
+	    if(pagename.equals("Chats")||pagename.equals("Groups")||pagename.equals("Importent")||pagename.equals("Others")) {
 			cd.setPagetype(pagename);
-			return "chatlist";
-		default :
-			System.err.println("[RedirectionController] [AllRedirection] No matching code found for the page redirection");
+			cd.setPagedata(passdata);
 			return "chatlist";
 		}
-		
+		else {
+			return "error/500";
+		}
 	}
 
 	@GetMapping("/chatlist")
 	public String showChatList() {
 		System.out.println("hii in the http://localhost:8111/chatlist");
 	    return "ctap_ChatList"; // matches your JSP filename: ctap_ChatList.jsp
+	}
+	
+	@GetMapping("/CTAP_WelcomePage")
+	public String welcomepage() {
+		System.out.println("hii in the http://localhost:8111/chatlist");
+	    return "Welcome";
 	}
 	
 }

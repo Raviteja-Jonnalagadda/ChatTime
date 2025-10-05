@@ -15,6 +15,8 @@ public class CommonDTO {
 	private String pagetype;
 	private String userid;
 	private LocalDateTime logintime;
+	private String pagedata;
+
 	
 	public String getLoginstatus() {
 		return loginstatus;
@@ -39,6 +41,12 @@ public class CommonDTO {
 	}
 	public void setLogintime(LocalDateTime logintime) {
 		this.logintime = logintime;
+	}
+	public String getPagedata() {
+		return pagedata;
+	}
+	public void setPagedata(String pagedata) {
+		this.pagedata = pagedata;
 	}
 	
 }
