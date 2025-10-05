@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Edit Query Repo</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background: #f7f7f7;
+			margin: 0;
+			padding: 20px;
+		}
+
+		h2 {
+			text-align: center;
+			color: #333;
+		}
+
+		form {
+			background-color: #fff;
+			border-radius: 8px;
+			padding: 25px;
+			max-width: 800px;
+			margin: auto;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		td {
+			padding: 10px;
+			vertical-align: top;
+		}
+
+		input[type="text"],
+		input[type="number"],
+		select,
+		textarea {
+			width: 100%;
+			padding: 8px;
+			border-radius: 4px;
+			border: 1px solid #ccc;
+			font-size: 14px;
+		}
+
+		textarea {
+			resize: vertical;
+			height: 60px;
+		}
+
+		button,.close {
+			background-color: #28a745;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			font-size: 16px;
+			border-radius: 5px;
+			cursor: pointer;
+			margin-top: 20px;
+		}
+
+		button:hover , .close:hover {
+			background-color: #218838;
+		}
+	</style>
+	<script src="../../js/min/jquery-3.7.1.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			// Fetch the queryId from the URL
+			const urlParams = new URLSearchParams(window.location.search);
+			const queryId = urlParams.get('queryId');
+
+			if (!queryId) {
+				alert("Query ID not provided!");
+				return;
+			}
+
+			// Fetch the existing record data using the queryId
+			$.ajax({
+				url: `../../admin/query_repo/getQueryById/${queryId}`,
+				type: 'POST',
+				success: function (response) {
+					console.log("Fetched data: ", response);
+					response = JSON.parse(response);
+					// Ensure that query_data exists and has at least one entry
+					console.log("Query Data Available:", response.QUERY_DATA);
+					console.log("Query Data Available:", response.QUERY_DATA.length);
+					//if (response.query_data && response.QUERY_DATA.length > 0) {
+						const queryData = response.QUERY_DATA[0];  // Accessing the first object inside query_data array
+						console.log("Query Data: ", queryData);  // Debug: Log the actual data
+
+
+						// Populate the form fields with the fetched data
+						$('#queryId').val(queryData.QUERY_ID);
+						$('#prj_id').val(queryData.PROJECT_ID);
+						$('#dec').val(queryData.QUERY_DEC);
+						$('#query').val(queryData.QUERY);
+						$('#qry_typ').val(queryData.QUERY_TYPE);
+						$('#crud_type').val(queryData.CRUD_TYPE);
+						$('#qry_cnd').val(queryData.QUERY_CONDITIONS);
+						$('#qry_table').val(queryData.QUERY_TABLE);
+						$('#qry_prm_cnr').val(queryData.QUERY_PARAM_COUNT);
+						$('#qry_clm').val(queryData.QUERY_COLUMN);
+						$('#mkr_id').val(queryData.MAKER_ID);
+						$('#return_type').val(queryData.RETURN_TYPE);// Populate Return Type field
+					/*} else {
+						alert("No data available for the provided Query ID.");
+					}*/
+				},
+				error: function (err) {
+					console.log("Error fetching data: ", err);
+					alert("Failed to load data for editing.");
+				}
+			});
+
+			$('#close_btn').on('click',function(){
+				window.opener.location.reload();  // Refresh parent window
+    		    window.close();  // Close the current popup window
+			});
+				
+				
+			
+			// Handle form submission
+			$('#editForm').on('submit', function (e) {
+				e.preventDefault();
+
+				const formData = $(this).serialize();
+				console.log("Form data: ", formData);
+
+				// Send the updated data to the backend
+				$.ajax({
+					url: `http://localhost:8111/admin/query_repo/updateQueryRepo/${queryId}`,
+					type: 'POST',
+					data: formData,
+					success: function (response) {
+						response = JSON.parse(response);
+						console.log("the response is --->   "+response);
+						if (response.sign === 'DONE') {
+							alert('Query Repo updated successfully!');
+							window.opener.location.reload();  // Refresh parent window
+							window.close();  // Close the current popup window
+						} else {
+							alert("Error: " + response.message);
+						}
+					},
+					error: function (err) {
+						console.log("Error updating data: ", err);
+						alert("Failed to update query repo.");
+					}
+				});
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<h2>Edit Query Repo</h2>
+
+	<form id="editForm">
+		<table>
+			<tr>
+				<td><label for="queryId">Query ID:</label></td>
+				<td><input type="text" id="queryId" name="name" readonly required></td>
+			</tr>
+			<tr>
+				<td><label for="prj_id">Project ID:</label></td>
+				<td><input type="text" id="prj_id" name="prj_id" required></td>
+			</tr>
+			<tr>
+				<td><label for="dec">Description:</label></td>
+				<td><input type="text" id="dec" name="dec" required></td>
+			</tr>
+			<tr>
+				<td><label for="query">Query:</label></td>
+				<td><textarea id="query" name="query" required></textarea></td>
+			</tr>
+			<tr>
+				<td><label for="qry_typ">Query Type:</label></td>
+				<td><select id="qry_typ" name="qry_typ" required>
+						<option value="">Select an Option</option>
+						<option value="PLANE_QUERY">Plane_Query</option>
+						<option value="STRANDED_QUERY">stranded_Query</option>
+						<option value="BREAKED_QUERY">BREAKED_QUERY</option>
+					</select></td>
+			</tr>
+			<tr>
+				<td><label for="crud_type">CRUD Type:</label></td>
+				<td><select id="crud_type" name="crud_type" required>
+						<option value="">Select an Option</option>
+						<option value="SELECT">Select</option>
+						<option value="INSERT">Insert</option>
+						<option value="DELETE">Delete</option>
+						<option value="UPDATE">Update</option>
+					</select></td>
+			</tr>
+			<tr>
+				<td><label for="return_type">Return Type:</label></td>
+				<td><select id="return_type" name="return_type" required>
+						<option value="">Select an Option</option>
+						<option value="EXECUTE">Execute</option>
+						<option value="NON_EXECUTE">Non Execute</option>
+					</select></td>
+			</tr>
+			<tr>
+				<td><label for="qry_cnd">Query Conditions:</label></td>
+				<td><textarea id="qry_cnd" name="qry_cnd" required></textarea></td>
+			</tr>
+			<tr>
+				<td><label for="qry_table">Query Table:</label></td>
+				<td><input type="text" id="qry_table" name="qry_table" required></td>
+			</tr>
+			<tr>
+				<td><label for="qry_prm_cnr">Query Param Count:</label></td>
+				<td><input type="number" id="qry_prm_cnr" name="qry_prm_cnr" required></td>
+			</tr>
+			<tr>
+				<td><label for="qry_clm">Query Column:</label></td>
+				<td><input type="text" id="qry_clm" name="qry_clm" required></td>
+			</tr>
+			<tr>
+				<td><label for="mkr_id">Maker ID:</label></td>
+				<td><input type="text" id="mkr_id" name="mkr_id" required></td>
+			</tr>
+		</table>
+
+		<div style="text-align: center;">
+			<button type="submit">Update</button>
+			<input type="button" id="close_btn" class="close" value="Unsave & Close"></input>
+		</div>
+	</form>
+</body>
+
+</html>

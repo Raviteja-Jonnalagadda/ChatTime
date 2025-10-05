@@ -1,0 +1,97 @@
+@media(max-width:768px){
+
+
+        body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Bar */
+    .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #0066cc;
+        color: white;
+        padding: 2px 4px;
+        margin: 3px;
+        border-radius: 10px;
+    }
+    .top-bar img {
+         height: 30px;
+        margin-right: 5px;
+        border-radius: 25px;
+        padding: 2%;
+    }
+    .app-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    font-family: monospace;
+    }
+        .datetime span {
+		font-size: xx-small;
+        white-space: nowrap;
+        display: block;
+        margin: 5px 0;
+        text-align: left;
+    }
+    .separator {
+        display: none!important;
+     }
+ .main-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh; /* full height of viewport */
+    }
+
+.sidebar {
+    width: 100%; /* full width if needed */
+    background: #d6e9fc;
+    border-right: 1px solid #ddd;
+    padding: 0;
+    overflow-x: auto;             /* enable horizontal scrolling */
+    white-space: nowrap;          /* prevent wrapping */
+}
+
+.sidebar ul {
+    display: flex;                /* arrange items in a row */
+    flex-direction: row;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+li.ctap-main-menu {
+    display: inline-block;        /* align items horizontally */
+    padding: 10px 20px;
+    /* padding: 5px 10px; */
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 45px;
+    white-space: nowrap;         /* prevent text wrapping */
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+li.ctap-main-menu:hover {
+    background-color: #74a3f8;
+}
+
+  .ctap-srtxt {
+    flex: 1 1 auto;
+  }
+
+  .ctap-btn {
+    flex: 0 0 auto;
+  }
+
+  .ctap-search {
+    flex-wrap: nowrap;
+  }
+
+}

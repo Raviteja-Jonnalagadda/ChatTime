@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+    display: block;
+    margin: 0;
+}
+  .chat-container {
+    max-width: 100%;
+    margin: 0 auto;
+    flex-grow: 1;
+    overflow: auto;
+    margin-top: 4%;
+    margin-bottom: 4%;
+        overflow-y: auto;
+
+  }
+
+  .message {
+    display: flex;
+    margin: 10px 0;
+  }
+
+  .message.left {
+    justify-content: flex-start;
+  }
+
+  .message.right {
+    justify-content: flex-end;
+  }
+
+  .message-box {
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 25px;
+    background-color: #ffffff;
+  }
+
+  .left .message-box {
+    background-color: #ebebeb;
+    text-align: left;
+    border-bottom-right-radius: 0;
+    padding: 10px;
+    width: auto;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: normal;    
+    display: block;
+    height: auto;
+    border: dotted 3px #59e1f8;
+  }
+
+  .right .message-box {
+    background-color: #8ad6f4;
+    text-align: left;
+    border-bottom-right-radius: 0;
+    padding: 10px;
+    width: auto;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: normal;    
+    display: block;
+    height: auto;
+    margin-right: 7px;
+  }
+  #msg_right:hover{
+    background-color: #c8f3f7;
+    border-radius: 20px;
+  }
+  #msg_left:hover{
+    background-color: #c8f3f7;
+    border-radius: 20px;
+  }
+
+.ctap-usr-info {
+    display: flex;
+    position: fixed;
+    width: 99%;
+     /* justify-content: space-between; /* pushes items to the edges */
+    align-items: center; /* vertically center if needed */
+    background: linear-gradient(45deg, #9ce3ff, #69a1f9);
+    border-radius: 20px;
+}
+.ctap-usr-avtr-img{
+    width: 50px;
+    border-radius: 50px;
+}
+.ctap-usr-nm{
+    font-size: 20px;
+    margin-left: 5%;
+}
+.ctap-usr-status{
+    margin: 10px;
+}
+/* Container fixed at bottom */
+.ctap-msg-typ {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    /*padding: 10px; */
+    background-color: #e6f2ff; /* Light blue background */
+    border-top: 1px solid #b3d9ff;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+}
+
+/* Text input */
+.ctap-mtp-txt {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px 16px;
+    border: 1px solid #b3d9ff;
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+    background-color: #ffffff;
+    transition: border 0.3s;
+}
+
+.ctap-mtp-txt:focus {
+    border-color: #66b3ff;
+}
+
+/* Button */
+.ctap-mtp-btn {
+flex: 1;
+    padding: 12px 24px;
+    background-color: #66b3ff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.ctap-mtp-btn:hover {
+    background-color: #3399ff;
+}
+
+.master-div{
+    display: flex;
+    flex-direction: column;
+    height: 100vh; 
+}
+
+
+@media(max-width:786px){
+      .chat-container {
+    max-width: 100%;
+    margin: 0 auto;
+    flex-grow: 1;
+    overflow: auto;
+        overflow-y: auto;
+    margin-top: 12%;
+    margin-bottom: 12%;
+  }
+
+}
+</style>
+        <script src="../js/jquery-3.7.1.min.js"></script>
+        <script src="../js/ChatApp_Utils.js"></script>
+<script>
+$(document).ready(function() {
+    console.log('[ctap_msg] [document ready] JS Loaded Successfully');
+
+    var msgdat = {
+        'msgcnt':'6',
+        'usrname':'Mr.Introvert',
+        'usravtr':'..//images//boy_basic_img_1.png',
+        'msg':{
+            'smsg1':'Hi I am Mr Itrovert',
+            'omsg1':'Hello I am Ms Extrovert',
+            'smsg2':'You are so Beautiful',
+            'omsg2':'Hoo Thanks You to look nice',
+            'smsg3':`The quick brown fox jumps over the lazy dog.  
+
+ChatGPT is generating some sample sentences so you can test your CSS properly.  
+
+Sometimes, very long words like Supercalifragilisticexpialidocious can cause trouble if word-breaking is not set correctly.  
+
+This_is_a_really_really_really_long_word_without_any_spaces_that_should_wrap_properly_if_you_set_the_CSS_correctly.  
+
+Normal text with spaces should wrap onto the next line without breaking words.  
+
+A URL-like string: https://www.thisisaverylongdomainnamethatmightnotfit.com/somepath/to/a/resource  
+
+Line breaks  
+should also  
+work as expected if white-space is set to normal.
+ `,
+            'omsg3':'Thanks Namastha',
+            'omsg4':'hii hello'
+        }
+    };
+    messagebuilder('amsg',JSON.stringify(msgdat));
+
+    $('#msg_right').on('mousedown touchstart',function(){
+console.log('Right clicked');
+    });
+
+     $('#msg_left').on('click',function(){
+
+    });
+
+    $('#smsg_btn').on('click',function(){
+        let smsgval = $('#smsg').val();
+        console.log('smsg is -->  '+smsgval);
+        if(smsgval.trim().length===0){
+            alert('Please enter the message before submit');
+        }
+        else{
+            console.log('Sending the smsg to the smessagehandler -->  '+smsgval);
+            let smsgstatus = smessagehandler(smsgval);
+            console.log('smsgstatus is --->  '+smsgstatus);
+            if(smsgstatus.substring(0,smsgstatus.indexOf('~'))==='DONE'){
+                $('#smsg').val('');
+            }
+            else if(smsgstatus.substring(0,smsgstatus.indexOf('~'))==='FAIL'){
+               alert('Issue while --->  '+smsgstatus.substring(5));
+            }
+            else{
+                alert('Unexpected error occured while handling the issue please retry .');
+            }
+        }
+    });
+
+});
+
+function smessagehandler(smsg){
+let rmsg = null;
+let smsgDBstatus = false;
+
+    if(smsg.length<=0){
+        console.log('FAIL~Cant Process Null Messages')
+        rmsg = 'FAIL~Cant Process Null Messages'
+        return rmsg;
+    }
+    /**
+     * Block 1 Sends the message to the BACKEND and store the message in DB .
+     **/
+    smsgDBstatus = sockethandler(smsg);
+    if(smsgDBstatus == false){
+        console.log('FAIL~Unable to send message . Please check your Internet connectivity and try again .');
+       rmsg = 'FAIL~Unable to send message . Please check your Internet connectivity and try again .';
+       return rmsg;
+    }
+    else if(smsgDBstatus == true){
+        console.log('storing in db is completed');
+        console.log('sendting the message to the selfmessagbuilder -->  '+smsg);
+        let msgbldstatus = selfmessagbuilder(smsg);
+        console.log('msgbldstatus  '+msgbldstatus);
+        if(msgbldstatus.substring(0,msgbldstatus.indexOf('~'))==='DONE'){
+        console.log('DONE');
+        return msgbldstatus;
+        }
+        else if(msgbldstatus.substring(0,msgbldstatus.indexOf('~'))==='FAIL'){
+        console.log('FAIL');
+        let emsg = console.log(msgbldstatus.indexOf('~')+1);
+        return 'FAIL~'+emsg;
+        }
+    }
+    else{
+        console.log('FAIL~Unknown Exception occured . Please check you Internet connectivity and try again .');
+        rmsg = 'FAIL~Unknown Exception occured . Please check you Internet connectivity and try again .';
+        return rmsg;
+    }
+
+}  
+function sockethandler(smsg){
+console.log('in the sockethandler for sending the messag to Backend --->  '+smsg);
+    return true;
+
+}
+
+function selfmessagbuilder(msg){
+console.log('in the selfmessagbuilder --->  '+msg);
+    let findtype = 'mtype';
+    let msgtyp = 'smsg';
+    let result;
+    let msgboxid = messageboxplacefinder(findtype,msgtyp);
+    if(msgboxid.substring(0,msgboxid.indexOf('~'))=='DONE'){
+        msgboxid = msgboxid.substring(msgboxid.indexOf('~')+1);
+        console.log('Got the Place for new message -->  '+msgboxid);
+        let newmsgid = msgtyp+ (parseInt(msgboxid.substring(msgtyp.length))+1);
+        console.log('new message id is '+newmsgid);
+        let msgdat = {[newmsgid]:msg};
+        var smsgbuildstatus = messagebuilder(msgtyp,JSON.stringify(msgdat));
+        console.log('smsgbuildstatus  '+smsgbuildstatus);
+        if(smsgbuildstatus.substring(0,smsgbuildstatus.indexOf('~'))=='DONE'){
+            result = smsgbuildstatus;
+        }
+        else if(smsgbuildstatus.substring(0,smsgbuildstatus.indexOf('~'))==='FAIL'){
+            result = 'FAIL~'+smsgbuildstatus.indexOf('~')+1;
+        }
+        else{
+            result = 'FAIL~Unexpected error while building the message . Please try again .';
+        }
+    }
+    else if(msgboxid.substring(0,msgboxid.indexOf('~'))=='FAIL'){
+        console.log('Error while getting the Place for new message -->  '+msgboxid.substring(5));
+        result = 'FAIL~'+msgboxid.indexOf('~')+1;
+    }
+    else{
+        console.log('Unexpected Error while getting the Place for new message because of [messageboxplacefinder] returns this -->  '+msgboxid);
+         result = 'FAIL~Unexpected error while building the message . Please try again or refresh the page  .';
+    }
+    return result;
+}
+
+function messageboxplacefinder(type,val){
+    let result = null;
+ let elementlist = $('['+type+'="'+val+'"]');
+console.log('all the left elements are --->  '+JSON.stringify(elementlist));
+    var lastelement = elementlist.toArray().reverse().find(function(element){
+        return $(element).attr('id');
+    });
+    if(lastelement){
+        let lastsmsgid = $(lastelement).attr('id');
+        console.log('the last self message id is -->  '+lastsmsgid);
+        result = 'DONE~'+lastsmsgid;
+    }
+    else{
+        console.log('Cant find the last type in the present DOM .'+window.location.pathname);
+        result = 'FAIL~Cant find the last type in the present DOM .'+window.location.pathname;
+    }
+    return result;
+}
+
+function messagebuilder(type,msgdat) {
+    console.log('Recived type is -->  '+type);
+    console.log('[ctap_msg] [messagebuilder] Recived Message Data is -->  '+msgdat);  
+    try{
+    let messages = null; 
+    let mdata = null; 
+    if(type === 'amsg'){
+    mdata = JSON.parse(msgdat);
+    let ctunm = (mdata.usrname)?mdata.usrname:'NO_DATA';
+    let usravt = (mdata.usravtr)?mdata.usravtr:'NO_DATA';
+    $('#ctap_usr_avtr_img').attr('src',usravt);
+    $('#ctapusrname').text(ctunm);
+    let mcnt = (mdata.msgcnt)?mdata.msgcnt:'0';
+    if(mcnt > 0){
+        console.log('the final messag that is building is --->  '+mdata.msg);
+    messages = mdata.msg;
+    }
+}
+    else if(type === 'smsg'){
+        mdata = JSON.parse(msgdat);
+         console.log('the final messag that is building is --->  '+mdata);
+        messages = mdata;
+    }
+     else if(type === 'omsg'){
+        mdata = JSON.parse(msgdat);
+        console.log('the final messag that is building is --->  '+mdata);
+        messages = mdata;
+    }
+    else{
+
+    }
+    Object.entries(messages).forEach(([key,val]) => {
+        let mtype = key;
+        if(mtype.substring(0,4) === 'smsg'){
+            console.log('self message is -->  '+val);
+            let msgdiv = $('<div>',{
+                class:'message-box',
+                id:key,
+                text:val
+            });
+            msgdiv.attr('mtype','smsg');
+            let mndiv = $('<div>',{
+                class:'message left',
+                id:'msg_left'+key.substring(5)
+            });
+            mndiv.append(msgdiv);
+            $('#chat_main_continer').append(mndiv);
+        }
+        else if(mtype.substring(0,4) === 'omsg'){
+              console.log('other message is -->  '+val);
+              let msgdiv = $('<div>',{
+                class:'message-box',
+                id:key,
+                text:val
+              });
+              msgdiv.attr('mtype','omsg');
+              let mndiv = $('<div>',{
+                class:'message right',
+                id:'msg_right'+key.substring(5)
+              });
+              mndiv.append(msgdiv);
+              $('#chat_main_continer').append(mndiv);
+        }
+    });
+$('#chat_main_continer').scrollTop($('#chat_main_continer')[0].scrollHeight);
+return 'DONE~Message Appended Sucessfully'
+    }
+    catch(error) {
+        console.error('[] [] Error while Building the messages --->  [ '+error+' ]');
+        return 'FAIL~Error While buulding the messages Please try again .'
+    }
+}
+</script>
+
+</head>
+<body>
+    <div class="ctap-usr-info" id="ctap_usr_info">
+        <div class="ctap-usr-avtr">
+            <img src="" id="ctap_usr_avtr_img" class="ctap-usr-avtr-img">
+        </div>
+        <div class="ctap-usr-nm" id="ctap_usr_nm">
+                <label id="ctapusrname"></label>
+        </div>
+        <!-- <div>
+            <div class="ctap-usr-status">
+                <label id="ctapusrstatus">Online</label>
+            </div>
+        </div> -->
+    </div>
+    <div id="master_div" class="master-div">
+<div id="chat_main_continer" class="chat-container"></div>
+<div class="ctap-msg-typ" id="ctap_msg_typ">
+<table>
+<tr>
+<td><input type="text" class="ctap-mtp-txt" name="smsg" id="smsg" placeholder="Type Your Message Hear ...." /></td>
+<td><input type="button" name="smsg_btn" id="smsg_btn" class="ctap-mtp-btn" value="Send" /></td>
+</tr>
+</table>
+</div>
+</div>
+</body>
+</html>

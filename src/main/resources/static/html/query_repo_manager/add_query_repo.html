@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Add New Query Record</title>
+
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background: #f7f7f7;
+			margin: 0;
+			padding: 20px;
+		}
+
+		h2 {
+			text-align: center;
+			color: #333;
+		}
+
+		form {
+			background-color: #fff;
+			border-radius: 8px;
+			padding: 25px;
+			max-width: 800px;
+			margin: auto;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		td {
+			padding: 10px;
+			vertical-align: top;
+		}
+
+		input[type="text"],
+		input[type="number"],
+		select,
+		textarea {
+			width: 100%;
+			padding: 8px;
+			border-radius: 4px;
+			border: 1px solid #ccc;
+			font-size: 14px;
+		}
+
+		textarea {
+			resize: vertical;
+			height: 60px;
+		}
+
+		button {
+			background-color: #28a745;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			font-size: 16px;
+			border-radius: 5px;
+			cursor: pointer;
+			margin-top: 20px;
+		}
+
+		button:hover {
+			background-color: #218838;
+		}
+	</style>
+
+	<script src="../../js/min/jquery-3.7.1.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			// Load Query ID from backend
+			$.ajax({
+				url: "../../admin/query_repo/getNextQueryId",
+				type: "POST",
+				success: function (queryId) {
+					$('#queryId').val(queryId);
+				},
+				error: function () {
+					alert("Failed to load Query ID");
+					$('#queryId').val('');
+				}
+			});
+
+			// Handle form submission
+			$('#addForm').on('submit', function (e) {
+				e.preventDefault();
+
+				const formData = $(this).serialize();
+				console.log("the form data is --->  " + JSON.stringify(formData))
+				$.ajax({
+					url: '../../admin/query_repo/addnewrepo',
+					type: 'POST',
+					data: formData,
+					success: function (response) {
+						response = JSON.parse(response);
+						console.log("Response received: ", response);
+						console.log("Response response.sign: ", response.sign);
+
+						    console.log("Checking condition: response.sign === 'DONE' ? ", response.sign === 'DONE');
+						    
+						    if (response.sign === 'DONE' && response.effected_row === 1) {
+						      alert('One Query Repo Added');
+						      window.opener.location.reload();  // Refresh parent window
+						      window.close();  // Close the current popup window
+						    } else {
+						      alert("Something went wrong, the record was not added.");
+						    }				},
+					error: function (err) {
+						console.log("Error", err);
+					}
+				});
+			});
+		});
+	</script>
+</head>
+
+<body>
+
+	<h2>Add New Query Record</h2>
+
+	<form id="addForm">
+		<table>
+			<tr>
+				<td><label for="queryId">Query ID:</label></td>
+				<td><input type="text" id="queryId" name="queryId" readonly required></td>
+			</tr>
+			<tr>
+				<td><label>Project ID:</label></td>
+				<td><input type="text" name="prj_id" value="Chat Time Application" required></td>
+			</tr>
+			<tr>
+				<td><label>Description:</label></td>
+				<td><input type="text" name="dec" required></td>
+			</tr>
+			<tr>
+				<td><label>Query:</label></td>
+				<td><textarea name="query" required></textarea></td>
+			</tr>
+			<tr>
+				<td><label>Query Type:</label></td>
+				<td>
+					<select name="qry_typ" required>
+						<option value="">Select an Option</option>
+						<option value="Plane_Query">Plane_Query</option>
+						<option value="stranded_Query">stranded_Query</option>
+						<option value="BREAKED_QUERY">BREAKED_QUERY</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><label>CRUD Type:</label></td>
+				<td>
+					<select name="crud_type" required>
+						<option value="">Select an Option</option>
+						<option value="SELECT">Select</option>
+						<option value="INSERT">Insert</option>
+						<option value="DELETE">Delete</option>
+						<option value="UPDATE">Update</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="return_type">Return Type:</label></td>
+				<td><select id="return_type" name="return_type" required>
+						<option value="">Select an Option</option>
+						<option value="EXECUTE">Execute</option>
+						<option value="NON_EXECUTE">Non Execute</option>
+					</select></td>
+			</tr>
+			<tr>
+				<td><label>Query Conditions:</label></td>
+				<td><textarea name="qry_cnd" required></textarea></td>
+			</tr>
+			<tr>
+				<td><label>Query Table:</label></td>
+				<td><input type="text" name="qry_table" required></td>
+			</tr>
+			<tr>
+				<td><label>Query Param Count:</label></td>
+				<td><input type="number" name="qry_prm_cnr" required></td>
+			</tr>
+			<tr>
+				<td><label>Query Column:</label></td>
+				<td><input type="text" name="qry_clm" required></td>
+			</tr>
+			<tr>
+				<td><label>Maker ID:</label></td>
+				<td><input type="text" name="mkr_id" required></td>
+			</tr>
+		</table>
+
+		<div style="text-align: center;">
+			<button type="submit">Submit</button>
+		</div>
+	</form>
+
+</body>
+
+</html>

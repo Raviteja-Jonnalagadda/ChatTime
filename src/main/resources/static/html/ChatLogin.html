@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Chat App Login</title>
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			background: linear-gradient(to right, #83a4d4, #b6fbff);
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		}
+
+		.header {
+			background: linear-gradient(223deg, #62b9b8, #c8e98b);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 10px 30px;
+			height: 70px;
+			color: #fff;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.ctap-login-logo {
+			margin-top: 9%;
+			height: 70px;
+			border-radius: 30%;
+		}
+
+		.ctap-hd-ct h1 {
+			font-size: 22px;
+			font-weight: 600;
+			color: #003e4d;
+		}
+
+		.ctap-hd-rt {
+			font-size: 14px;
+			color: #003e4d;
+		}
+
+		/* Login Card */
+		.ctap-main-div {
+			flex: 1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.ctap-login-cont {
+			background: white;
+			padding: 40px 30px;
+			border-radius: 15px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+			text-align: center;
+			width: 100%;
+			max-width: 400px;
+		}
+
+		.ctap-login-cont h2 {
+			margin-bottom: 20px;
+			color: #003e4d;
+		}
+
+		.ctap-login-cont input[type="text"],
+		.ctap-login-cont input[type="password"] {
+			width: 100%;
+			padding: 12px;
+			margin: 10px 0 20px 0;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			font-size: 14px;
+			transition: border-color 0.3s ease;
+		}
+
+		.ctap-login-cont input[type="text"]:focus,
+		.ctap-login-cont input[type="password"]:focus {
+			border-color: #00b4d8;
+			outline: none;
+		}
+
+		.ctap-submit {
+			background-color: #00b4d8;
+			border: none;
+			color: white;
+			padding: 12px 20px;
+			font-size: 15px;
+			border-radius: 25px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			width: 100%;
+		}
+
+		.ctap-submit:hover {
+			background-color: #0096c7;
+		}
+
+		.ctap-links {
+			margin-top: 20px;
+		}
+
+		.ctap-links a {
+			display: block;
+			text-decoration: none;
+			color: #0077b6;
+			margin-top: 8px;
+			transition: color 0.3s ease;
+		}
+
+		.ctap-links a:hover {
+			color: #023e8a;
+		}
+
+		/* Responsive */
+		@media (max-width: 600px) {
+			.header {
+				flex-direction: column;
+				align-items: flex-start;
+				height: auto;
+				padding: 10px 20px;
+			}
+
+			.ctap-hd-ct h1 {
+				font-size: 18px;
+				margin-top: 10px;
+			}
+
+			.ctap-hd-rt {
+				margin-top: 5px;
+			}
+		}
+
+		.popup {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			min-width: 280px;
+			max-width: 350px;
+			padding: 15px 20px;
+			border-radius: 10px;
+			font-size: 14px;
+			color: #fff;
+			display: none;
+			/* HIDDEN INITIALLY */
+			z-index: 9999;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+			background-color: #333;
+			display: none;
+			/* <-- Ensures it's hidden by default */
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.popup.success {
+			background-color: #28a745;
+		}
+
+		.popup.error {
+			background-color: #dc3545;
+		}
+
+		.popup-msg {
+			flex: 1;
+			padding-right: 10px;
+		}
+
+		.popup-close {
+			font-size: 18px;
+			font-weight: bold;
+			cursor: pointer;
+			color: #fff;
+			padding: 0 5px;
+		}
+
+		.popup-close:hover {
+			color: #ccc;
+		}
+
+		/* Spinner Overlay Wrapper */
+		.chat-spinner-wrapper {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.3);
+			/* semi-transparent */
+			display: none;
+			/* hidden initially */
+			justify-content: center;
+			align-items: center;
+			z-index: 99999;
+		}
+
+		/* Spinner Circle */
+		.chat-spinner {
+			border: 6px solid #f3f3f3;
+			/* Light grey */
+			border-top: 6px solid #0077b6;
+			/* Chat app blue */
+			border-radius: 50%;
+			width: 50px;
+			height: 50px;
+			animation: spin 1s linear infinite;
+		}
+
+		/* Spin Animation */
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- Header -->
+	<header class="header">
+		<div class="ctap-hd-lt">
+			<img src="../images/chat_App_logo.jpg" alt="Chat App Logo" class="ctap-login-logo" />
+		</div>
+		<div class="ctap-hd-ct">
+			<h1>Chat Application Login</h1>
+		</div>
+		<div class="ctap-hd-rt">
+			<span id="date"></span> | <span id="time"></span>
+		</div>
+	</header>
+
+	<!-- Login Container -->
+	<div class="ctap-main-div">
+		<div class="ctap-login-cont">
+			<h2>Welcome Back 👋</h2>
+			<form id="ct_login_form" method="post">
+			<input type="text"  name="ctap_uid" id="ctap_uid" placeholder="Enter User ID" />
+			<input type="password" name="ctap_pwd" id="ctap_pwd" placeholder="Enter Password" />
+			<input class="ctap-submit" type="button" id="ctap_submit" value="Login" />
+			</form>
+			<div class="ctap-links">
+				<a href="#">Forgot Password?</a>
+				<a href="#">Sign Up</a>
+			</div>
+		</div>
+	</div>
+
+	<!-- jQuery & Time Update -->
+	<script src="../js/min/jquery-3.7.1.min.js"></script>
+	<script>
+		function updateDateTime() {
+			const now = new Date();
+			const dateStr = now.toLocaleDateString('en-IN', {
+				weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+			});
+			const timeStr = now.toLocaleTimeString('en-IN');
+			$('#date').text(dateStr);
+			$('#time').text(timeStr);
+		}
+		function showSuccess(message) {
+			if ($('#successPopup').length) {
+				$('#errorPopup').hide();
+				$('#successPopup .popup-msg').text('✔️ ' + message);
+				$('#successPopup').fadeIn().delay(1000).slideUp(1000);
+			} else {
+				console.log("Success popup not found in the DOM.");
+			}
+		}
+
+		function showError(message) {
+			$('#successPopup').hide();
+			$('#errorPopup .popup-msg').text('❌ ' + message);
+			$('#errorPopup').fadeIn().delay(5000).slideUp(1000);
+		}
+
+		function closePopup(id) {
+			$('#' + id).fadeOut();
+		}
+		function showSpinner() {
+			$('#chatSpinner').css('display', 'flex');
+			$('#chatSpinner').fadeIn();
+		}
+
+		function hideSpinner() {
+			$('#chatSpinner').css('display', 'none');
+			$('#chatSpinner').fadeOut();
+		}
+
+		$(document).ready(function () {
+			window.alert = function(){}; console.log = console.info = console.warn = console.error = function(){};
+			updateDateTime();
+			setInterval(updateDateTime, 1000);
+
+			$('#ctap_submit').on('click', function () {
+				const uid = $('#ctap_uid').val().trim();
+				const pwd = $('#ctap_pwd').val().trim();
+
+				if (!uid || !pwd) {
+					showError("Please enter both User ID and Password.");
+				} else {
+					let ldata = {
+						uname: $('#ctap_uid').val(),
+						pwd: $('#ctap_pwd').val()
+					};
+					showSpinner();
+					$.ajax({
+						url: '/ctapLogin',
+						contentType: 'application/json',
+						method: 'POST',
+						data: JSON.stringify(ldata),
+						success(response) {
+							hideSpinner();
+							let signval = response.substring(0, 4);
+							console.log("signval -->  [ " + signval + " ]");
+							if (signval === 'DONE') {
+								console.log("Login Response: ", response);
+								showSuccess("Login successful! (demo only)");
+								$('#ct_login_form').attr('action','../SucessLogin');
+								$('#ct_login_form').submit();
+							}
+							else if (signval === 'FAIL') {
+								let val = JSON.parse(response.substring(5));
+								console.log("val -->  [ " + JSON.stringify(val) + " ]");
+								let ermsg = val.emessage;
+								console.log("the error message is --->  [ " + ermsg + " ]");
+								showError(ermsg);
+							}
+							else {
+								console.log("Unknow Resopnse");
+								showError("Unexpexted Response Please try again . If this repets please contact our team")
+							}
+						},
+						error: function (xhr, status, error) {
+							hideSpinner();
+							console.error("Login Error: ", error);
+							showError("Unexpected Issue "+error);
+						}
+					});
+					hideSpinner();
+				}
+			});
+		});
+	</script>
+	<!-- Popup Messages -->
+	<div id="successPopup" class="popup success">
+		<span class="popup-msg">✔️ Success message</span>
+		<span class="popup-close" onclick="closePopup('successPopup')">&times;</span>
+	</div>
+
+	<div id="errorPopup" class="popup error">
+		<span class="popup-msg">❌ Error message</span>
+		<span class="popup-close" onclick="closePopup('errorPopup')">&times;</span>
+	</div>
+	<!-- Spinner Loader -->
+	<div id="chatSpinner" class="chat-spinner-wrapper">
+		<div class="chat-spinner"></div>
+	</div>
+
+</body>
+
+</html>
