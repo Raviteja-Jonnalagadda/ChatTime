@@ -1,0 +1,46 @@
+@charset "ISO-8859-1";
+
+.ctap-ct-list-table {
+	width: 100%;
+	background-color: #d8dad9;
+	padding: 5px;
+	border-radius: 10px;
+}
+
+.ctap-chatlist {
+	width: 98%;
+	background-color: burlywood;
+	padding: 3% !important;
+	border-radius: 10px !important;
+}
+
+.ctap-ct-list-tdata {
+	display: flex;
+	border-bottom: solid #4b4a4a 1px;
+}
+
+.ctap-chatlist {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	margin: 5px 0;
+	background-color: #f9f9f9;
+}
+
+.ctap-cl-lab {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.ctap-cl-urmsg-cnt {
+	background-color: rgb(122, 225, 249);
+	color: rgb(15, 0, 0);
+	font-size: 14px;
+	padding: 4px 8px;
+	border-radius: 50%;
+	min-width: 24px;
+	text-align: center;
+}

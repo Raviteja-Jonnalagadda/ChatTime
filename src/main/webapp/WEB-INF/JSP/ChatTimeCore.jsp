@@ -9,13 +9,11 @@
   <title>Chat Time Dashboard</title>
 <link href="<ct:url value='/resources/css/bashbord.css?v=<%= System.currentTimeMillis() %>' />" rel="stylesheet">
 <link href="<ct:url value='/resources/css/bashboard_mobile_768.css?v=<%= System.currentTimeMillis() %>' />" rel="stylesheet">
-
 <script>
     var contextPath = "<%= request.getContextPath() %>";
 </script>
 </head>
 <body>
-
   <!-- Top Bar -->
   <div class="top-bar">
     <div>
@@ -47,7 +45,7 @@
       <ul id="menu"></ul>
     </div>
 
-<iframe class="chat-area" id="ctap_main_frame" src="<%= request.getContextPath() %>/chatlist" value="" title="Chat Area"></iframe>
+<iframe class="chat-area" id="ctap_main_frame" src="<%= request.getContextPath() %>/CTAP_WelcomePage" value="" title="Chat Area"></iframe>
   </div>
 
   <!-- Footer -->
