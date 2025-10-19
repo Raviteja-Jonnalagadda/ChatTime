@@ -35,7 +35,7 @@ $(document).ready(function() {
 
 	    console.log('[bashboard.js] [ctap-main-menu click event] extracted id: ' + val + ', path: ' + redirectPath);
 
-	    const data = { pname: val, pdata: 'ChatList' };
+	    const data = { pname: val, pdata: val };
 	    const url = await CtapAjax(data, pageurl);
 	    console.log('[bashboard.js] The Ajax Response or redirection URL is ---> ' + url);
 	    IframeHandler(url, val);
@@ -103,6 +103,3 @@ function TabBuilder() {
 		$('#menu').append(li);
 	});
 }
-
-
-

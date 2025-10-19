@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Chat App Login</title>
+	<link rel="icon" href="../images/chat_App_logo.jpg" type="image/png">
+	<meta name="theme-color" content="#ff69b4">
+	<link rel="stylesheet" href="../css/ChatLogin.css">
+	<link rel="stylesheet" href="../css/min/jquery-ui.css">
+	<script src="../js/ChatTimeDTO.js"></script>
+	<script>
+		pagetype='Signin';
+	</script>
+</head>
+
+<body>
+
+	<!-- Header -->
+	<header class="header">
+		<div class="ctap-hd-lt">
+			<img src="../images/chat_App_logo.jpg" alt="Chat App Logo" class="ctap-login-logo" />
+		</div>
+		<div class="ctap-hd-ct">
+			<h1>Chat Time Sign In</h1>
+		</div>
+		<div class="ctap-hd-rt">
+			<span id="date"></span> | <span id="time"></span>
+		</div>
+	</header>
+
+	<!-- Login Container -->
+	<div class="ctap-signin-main-div">
+		<div class="ctap-signin-cont">
+			<h2>Thanks for Being a part of our Comunity</h2>
+			<form id="ct_signin_form" method="post">
+				<table class="ctap-signin-table">
+					<tr>
+						<td class="ctap-signin-lab-td"><label for="fullname">Full Name</label></td>
+						<td class="ctap-signin-field-td"><input type="text" name="FullName" id="FullName" placeholder="Enter Full Name" required/></td>
+					</tr>
+					<tr>
+						<td class="ctap-signin-lab-td"><label for="emailid"></label>Eamil Id</tdclass="ctap-signin-lab-td">
+						<td class="ctap-signin-field-td"><input type="text" name="emailid" id="emailid" placeholder="Enter Eamil Id" required/></td>
+					</tr>					
+					<tr>
+						<td class="ctap-signin-lab-td"><label for="mobileno"></label>Mobile Number</td>
+						<td class="ctap-signin-field-td"><input type="text" name="mobileno" id="mobileno" placeholder="Enter Mobile Number" required/></td>
+					</tr>
+					<tr>
+						<td class="ctap-signin-lab-td"><label for="dob"></label>Date Of Birth</tdclass="ctap-signin-lab-td">
+						<td class="ctap-signin-field-td"><input type="text" name="dob" id="dob" placeholder="Date Of Birth" required/></td>
+					</tr>					
+					<tr>
+						<td class="ctap-signin-lab-td"><label for="gender"></label>Gender</td>
+						<td class="ctap-signin-field-td">
+							<input type="radio"  name="gender" id="genderMale" value="MALE"/><label for="genderMale" class="ctap-signin-radio-lab" id="gender">Male</label>
+							<input type="radio"  name="gender" id="genderFemale" value="FEMALE"/><label for="genderFemale"  class="ctap-signin-radio-lab" id="gender">Female</label>
+							<input type="radio"  name="gender" id="genderOther" value="OTHER"/><label for="genderOther"  class="ctap-signin-radio-lab" id="gender">Other</label>
+						</td>
+					</tr>
+					<tr>
+						<td class="ctap-signin-lab-td"><label for="ChatTimeId"></label>ChatTime Id</td>
+						<td class="ctap-signin-field-td"><input type="text" name="ChatTimeId" id="ChatTimeId" placeholder="MrChatTime001" required/></td>
+					</tr>	
+					<tr>
+						<td class="ctap-signin-lab-td"><label for="Pword"></label>Password</td>
+						<td class="ctap-signin-field-td"><input type="password" name="Pword" id="Pword" placeholder="<<<<<>>>>>" required/></td>
+					</tr>
+					<tr>
+						<td class="ctap-signin-lab-td"><label for="pwordhint"></label>Password Hint</td>
+						<td class="ctap-signin-field-td"><input type="text" name="pwordhint" id="pwordhint" placeholder="Enter Your Hint for Password" /></td>
+					</tr>						
+										
+				</table>
+				
+				
+			<input class="ctap-submit" type="button" id="ctap_signin_submit" value="Sign In"  />
+			</form>
+			<div class="ctap-links">
+				<a href="../html/ChatLogin.html">Login In</a>
+			</div>
+		</div>
+		
+	</div>
+
+	<!-- jQuery & Time Update -->
+	<script src="../js/min/jquery-3.7.1.min.js"></script>
+	<script src="../js/min/jquery-ui.min.js"></script>
+	<script src="../js/chat_core.js"></script>
+	<script src="../js/ChatLogin.js"></script>
+	<!-- Popup Messages -->
+	<div id="successPopup" class="popup success">
+		<span class="popup-msg">✔️ Success message</span>
+		<span class="popup-close" onclick="closePopup('successPopup')">&times;</span>
+	</div>
+	
+	<!-- OTP Popup -->
+	<div id="otpPopup" class="otp-popup-overlay">
+	    <div class="otp-popup-content">
+	        <span class="otp-close-btn" onclick="closeOtpPopup()">×</span>
+	        <h2>Enter OTP</h2>
+	        <input type="text" id="otpInput" maxlength="6" placeholder="Enter 6-digit OTP" />
+	        <div class="otp-timer" id="otpTimer">05:00</div>
+	        <button id="verifyOtpBtn" >Verify OTP</button>
+	        <button id="resendOtpBtn" onclick="resendOtp()" disabled>Resend OTP</button>
+	    </div>
+	</div>
+
+
+	<div id="errorPopup" class="popup error">
+		<span class="popup-msg">❌ Error message</span>
+		<span class="popup-close" onclick="closePopup('errorPopup')">&times;</span>
+	</div>
+	<!-- Spinner Loader -->
+	<div id="chatSpinner" class="chat-spinner-wrapper">
+		<div class="chat-spinner"></div>
+	</div>
+
+</body>
+
+</html>

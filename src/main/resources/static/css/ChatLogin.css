@@ -1,0 +1,362 @@
+@charset "ISO-8859-1";
+
+* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			background: linear-gradient(to right, #83a4d4, #b6fbff);
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		}
+
+		.header {
+			background: linear-gradient(223deg, #62b9b8, #c8e98b);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 10px 30px;
+			height: 70px;
+			color: #fff;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.ctap-login-logo {
+			margin-top: 9%;
+			height: 70px;
+			border-radius: 30%;
+		}
+
+		.ctap-hd-ct h1 {
+			font-size: 22px;
+			font-weight: 600;
+			color: #003e4d;
+		}
+		.ctap-hd-rt {
+			font-size: 14px;
+			color: #003e4d;
+		}
+		/* Login Card */
+		.ctap-main-div {
+			flex: 1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.ctap-signin-main-div {
+		    margin-top: 40px;
+		    flex: 1;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		}
+		.ctap-login-cont {
+			background: white;
+			padding: 40px 20px;
+			border-radius: 15px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+			text-align: center;
+			width: 100%;
+			max-width: 400px;
+		}
+		.ctap-signin-cont {
+					background: white;
+					padding: 40px 20px;
+					border-radius: 15px;
+					box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+					text-align: center;
+					width: 100%;
+					max-width: 800px;
+				}
+		.ctap-signin-table{
+				width: 100%;
+				margin-right: auto;
+			    margin-left: auto;
+				background-color: aliceblue;
+				border-radius: 18px;
+		}
+		.ctap-signin-lab-td{
+			text-align: left;
+			padding: 0px 55px;
+		}
+		
+		.ctap-signin-field-td{
+			text-align: left;
+			padding: 0px 10px;
+		}
+		
+		.ctap-login-cont h2,.ctap-signin-cont h2 {
+			margin-bottom: 20px;
+			color: #003e4d;
+		}
+
+		.ctap-login-cont input[type="text"],.ctap-login-cont input[type="password"],.ctap-login-cont input[type="email"],
+		.ctap-signin-cont input[type="text"],.ctap-signin-cont input[type="password"],.ctap-signin-cont input[type="email"] {
+			width: 100%;
+			padding: 12px;
+			margin: 10px 0 20px 0;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			font-size: 14px;
+			transition: border-color 0.3s ease;
+		}
+
+		.ctap-login-cont input[type="text"]:focus,
+		.ctap-login-cont input[type="password"]:focus,
+		.ctap-login-cont input[type="email"]:focus,
+		.ctap-signin-cont input[type="text"]:focus,
+		.ctap-signin-cont input[type="password"]:focus,
+		.ctap-signin-cont input[type="email"]:focus 
+		{
+			border-color: #00b4d8;
+			outline: none;
+		}
+
+		.ctap-submit {
+			background-color: #00b4d8;
+			border: none;
+			color: white;
+			padding: 12px 20px;
+			font-size: 15px;
+			border-radius: 25px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			width: 100%;
+		}
+
+		.ctap-submit:hover {
+			background-color: #0096c7;
+		}
+		
+		.ctap-signin-radio-lab{
+			margin: 1px;
+			font-size: 13px;
+		}
+
+		.ctap-links {
+			margin-top: 20px;
+		}
+
+		.ctap-links a {
+			display: block;
+			text-decoration: none;
+			color: #0077b6;
+			margin-top: 8px;
+			transition: color 0.3s ease;
+		}
+
+		.ctap-links a:hover {
+			color: #023e8a;
+		}
+
+		/* Popup Overlay */
+		.otp-popup-overlay {
+		    display: none;
+		    position: fixed;
+		    top: 0; left: 0;
+		    width: 100%; height: 100%;
+		    background: rgba(0, 0, 0, 0.6);
+		    z-index: 9999;
+		    justify-content: center;
+		    align-items: center;
+		}
+
+		/* Popup Content */
+		.otp-popup-content {
+		    background: white;
+		    padding: 20px 30px;
+		    border-radius: 10px;
+		    position: relative;
+		    width: 300px;
+		    text-align: center;
+		    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+		}
+
+		/* Close Button */
+		.otp-close-btn {
+		    position: absolute;
+		    top: 10px; right: 15px;
+		    font-size: 20px;
+		    cursor: pointer;
+		}
+
+		/* OTP Input */
+		#otpInput {
+		    width: 100%;
+		    padding: 10px;
+		    font-size: 18px;
+		    text-align: center;
+		    margin-bottom: 15px;
+		    border: 1px solid #ccc;
+		    border-radius: 5px;
+		}
+
+		/* Timer */
+		.otp-timer {
+		    font-size: 16px;
+		    margin-bottom: 15px;
+		    color: #333;
+		}
+
+		/* Buttons */
+		#verifyOtpBtn, #resendOtpBtn {
+		    padding: 10px 15px;
+		    font-size: 16px;
+		    margin: 5px;
+		    border: none;
+		    border-radius: 5px;
+		    cursor: pointer;
+		}
+
+		#verifyOtpBtn {
+		    background-color: #28a745;
+		    color: white;
+		}
+
+		#resendOtpBtn {
+		    background-color: #007bff;
+		    color: white;
+		}
+
+		#resendOtpBtn:disabled {
+		    background-color: #aaa;
+		    cursor: not-allowed;
+		}
+
+		/* Responsive */
+		@media (max-width: 600px) {
+			.header {
+				flex-direction: column;
+				align-items: flex-start;
+				height: auto;
+				padding: 10px 20px;
+			}
+
+			.ctap-hd-ct h1 {
+				font-size: 18px;
+				margin-top: 10px;
+			}
+
+			.ctap-hd-rt {
+				margin-top: 5px;
+			}
+		}
+
+		.popup {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			min-width: 280px;
+			max-width: 350px;
+			padding: 15px 20px;
+			border-radius: 10px;
+			font-size: 14px;
+			color: #fff;
+			display: none;
+			/* HIDDEN INITIALLY */
+			z-index: 9999;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+			background-color: #333;
+			display: none;
+			/* <-- Ensures it's hidden by default */
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.popup.success {
+			background-color: #28a745;
+		}
+
+		.popup.error {
+			background-color: #dc3545;
+		}
+
+		.popup-msg {
+			flex: 1;
+			padding-right: 10px;
+		}
+
+		.popup-close {
+			font-size: 18px;
+			font-weight: bold;
+			cursor: pointer;
+			color: #fff;
+			padding: 0 5px;
+		}
+
+		.popup-close:hover {
+			color: #ccc;
+		}
+
+		/* Spinner Overlay Wrapper */
+		.chat-spinner-wrapper {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.3);
+			/* semi-transparent */
+			display: none;
+			/* hidden initially */
+			justify-content: center;
+			align-items: center;
+			z-index: 99999;
+		}
+
+		/* Spinner Circle */
+		.chat-spinner {
+			border: 6px solid #f3f3f3;
+			border-top: 6px solid #0077b6;
+			border-radius: 50%;
+			width: 50px;
+			height: 50px;
+			animation: spin 1s linear infinite;
+		}
+
+		.check-ctid {
+		    border-radius: 10px;
+		    padding: 5px;
+		    background-color: #00b4d8;
+		    color: white;
+			transition: background-color 0.3s ease;
+		}
+		.check-ctid :hover{
+			background-color: #0077b6;
+		}
+		
+		.ctap-resotp-timer{
+			color: #0077b6;
+		}
+		.ctap-new-password{
+			display: none;
+		}
+		.ctap-forgtpassword-sub{
+			display: none;
+		}
+
+		
+		
+		/* Spin Animation */
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+		@media(max-width:768px){
+			.ctap-signin-lab-td , .ctap-signin-field-td{
+				padding: 0px;
+			}
+			.ctap-signin-cont input[type="text"], .ctap-signin-cont input[type="password"]{
+				padding: 7px;
+				font-size: 10px;
+			}
+		}

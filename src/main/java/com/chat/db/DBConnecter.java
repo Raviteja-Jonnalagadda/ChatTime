@@ -46,7 +46,7 @@ public class DBConnecter {
 		Connection cn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		System.out.println("qid --->   " + qid);
+		System.out.println("[DBConnecter] [getdata] qid --->   " + qid);
 		try {
 			if (qid == null || qid.trim().isEmpty()) {
 				qid = "CTAP1002"; // Query ID is null
@@ -61,24 +61,24 @@ public class DBConnecter {
 			if (rs.next())
 				count = rs.getInt(1);
 			close(rs, ps);
-			System.out.println("count of qid is --->   " + count);
+			System.out.println("[DBConnecter] [getdata] count of qid is --->   " + count);
 			if (count == 0) {
 				qid = "CTAP1003";
 			} else if (count > 1) {
 				qid = "CTAP1005";
 			}
 
-			System.out.println("getting the query type");
+			System.out.println("[DBConnecter] [getdata] getting the query type");
 			ps = cn.prepareStatement("SELECT QUERY_TYPE FROM QUERY_MASTER WHERE QUERY_ID = ?");
 			ps.setString(1, qid);
 			rs = ps.executeQuery();
-			System.out.println("extracting the query and query type");
+			System.out.println("[DBConnecter] [getdata] extracting the query and query type");
 			String qrtype = null;
 
 			if (rs.next()) {
 				qrtype = rs.getString("QUERY_TYPE");
 			}
-			System.out.println("query type --->  " + qrtype);
+			System.out.println("[DBConnecter] [getdata] query type --->  " + qrtype);
 			if (qrtype.equalsIgnoreCase("BREAKED_QUERY")) {
 				String result = null;
 				String qclm = null;
@@ -91,10 +91,10 @@ public class DBConnecter {
 				rs = ps.executeQuery();
 				String crud_typ = null;
 				if (rs.next()) {
-					System.out.println("in the if rs");
+					System.out.println("[DBConnecter] [getdata] in the if rs");
 					crud_typ = rs.getString("CRUD_TYPE");
 				}
-				System.out.println("got the crud type for breaked query --->  " + crud_typ);
+				System.out.println("[DBConnecter] [getdata] got the crud type for breaked query --->  " + crud_typ);
 				ps = cn.prepareStatement(
 						"SELECT Query_column,Query_Table,Query_conditions,Return_type FROM Query_Master WHERE Query_ID = ?");
 				ps.setString(1, qid);
@@ -105,12 +105,12 @@ public class DBConnecter {
 					qcond = rs.getString("Query_conditions");
 					rtype = rs.getString("Return_type");
 				}
-				System.out.println("got the query paramaters");
+				System.out.println("[DBConnecter] [getdata] got the query paramaters");
 				if (qclm.trim().isEmpty() || qtbl.trim().isEmpty() || qclm.equalsIgnoreCase("NA")
 						|| qtbl.equalsIgnoreCase("NA") || qcond.equalsIgnoreCase("NA")) {
-					System.out.println("some of the field are missing for breaked query");
+					System.out.println("[DBConnecter] [getdata] some of the field are missing for breaked query");
 				}
-				System.out.println("starting the switch stattement ");
+				System.out.println("[DBConnecter] [getdata] starting the switch stattement ");
 				switch (crud_typ) {
 				case "SELECT":
 					if (qclm.length() > 0 && qtbl.length() > 0 || qcond.length() > 0) {
@@ -135,7 +135,7 @@ public class DBConnecter {
 				}
 				if (!query.trim().isEmpty() || query.length() > 0) {
 					try {
-						System.out.println("final query --->  " + query);
+						System.out.println("[DBConnecter] [getdata] final query --->  " + query);
 						if (rtype.equalsIgnoreCase("EXECUTE")) {
 							result = SmartCrudEngine.dbexecuter(query, crud_typ);
 						} else {
@@ -197,8 +197,8 @@ public class DBConnecter {
 					qtype = rs.getString("CRUD_TYPE");
 				}
 			}
-			System.out.println("query is --->   " + query);
-			System.out.println("query type is --->  " + qtype);
+			System.out.println("[DBConnecter] [getdata] query is --->   " + query);
+			System.out.println("[DBConnecter] [getdata] query type is --->  " + qtype);
 			if (rtype.equalsIgnoreCase("EXECUTE")) {
 				result = SmartCrudEngine.dbexecuter(query, qtype);
 			} else {
@@ -218,6 +218,6 @@ public class DBConnecter {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(getdata("CTAP1018"));
+		System.out.println(getdata("CTAP1022"));
 	}
 }
