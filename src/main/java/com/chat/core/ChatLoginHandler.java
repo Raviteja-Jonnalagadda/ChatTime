@@ -19,26 +19,28 @@ public class ChatLoginHandler {
 
 	@Autowired 
 	 public CommonDTO cd;
-	public ChatTimeCoreUtility cu;
-	public String ctaploginchecker(String val) {
+	@Autowired	 
+	public ChatUtility cu;
+
+    public String ctaploginchecker(String val) {
 		System.out.println("val -->  "+val);
 		if (val.trim().equalsIgnoreCase("") || val.isEmpty() || val.length() <= 0) {
 			System.out.println("e001");
-			cd.setLoginstatus("FAIL"+"~"+cu.errormsg("E003"));
-			return "FAIL~" + cu.errormsg("E001");
+			cd.setLoginstatus("FAIL"+"~"+cu.getemsg("E001"));
+			return "FAIL~" + cu.getemsg("E001");
 		}
 		JSONObject mnjo = new JSONObject(val);
 		if (!mnjo.has("uname") || !mnjo.has("pwd")) {
 			System.out.println("e002");
-			cd.setLoginstatus("FAIL"+"~"+cu.errormsg("E003"));
-			return "FAIL~" + cu.errormsg("E002");
+			cd.setLoginstatus("FAIL"+"~"+cu.getemsg("E003"));
+			return "FAIL~" + cu.getemsg("E002");
 		}
 		String unam = mnjo.optString("uname", "NO_DATA");
 		String pwd = mnjo.optString("pwd", "NO_DATA");
 		if (unam.equalsIgnoreCase("NO_DATA") || pwd.equalsIgnoreCase("NO_DATA")) {
 			System.out.println("e003");
-			cd.setLoginstatus(unam+"~FAIL"+"~"+cu.errormsg("E003"));
-			return "FAIL~" + cu.errormsg("E003");
+			cd.setLoginstatus(unam+"~FAIL"+"~"+cu.getemsg("E003"));
+			return "FAIL~" + cu.getemsg("E003");
 		}
 		int unval = 0;
 		try {
@@ -64,13 +66,13 @@ public class ChatLoginHandler {
 			}
 			else {
 				System.out.println("Check the SMART CRUD ENGINE LOGS fail else");
-				cd.setLoginstatus(unam+"~FAIL"+"~"+cu.errormsg("E003"));
-				return "FAIL~" + cu.errormsg("E003");
+				cd.setLoginstatus(unam+"~FAIL"+"~"+cu.getemsg("E003"));
+				return "FAIL~" + cu.getemsg("E003");
 			}
 			if (unval == 0) {
 				System.out.println("fail 0");
-				cd.setLoginstatus(unam+"~FAIL"+"~"+cu.errormsg("E003"));
-				return "FAIL~" + cu.errormsg("E003");
+				cd.setLoginstatus(unam+"~FAIL"+"~"+cu.getemsg("E003"));
+				return "FAIL~" + cu.getemsg("E003");
 			} else if (unval == 1) {
 				System.out.println("pass");
 				cd.setLoginstatus(unam+"~DONE");
@@ -82,13 +84,13 @@ public class ChatLoginHandler {
 				
 			} else {
 				System.out.println(" fail else");
-				cd.setLoginstatus(unam+"~FAIL"+"~"+cu.errormsg("E003"));
-				return "FAIL~" + cu.errormsg("E003");
+				cd.setLoginstatus(unam+"~FAIL"+"~"+cu.getemsg("E003"));
+				return "FAIL~" + cu.getemsg("E003");
 			} 
 		} catch (Exception e) {
 			System.err.println("err  "+e);
-			cd.setLoginstatus(unam+"~FAIL"+"~"+cu.errormsg("E003"));
-			return "FAIL~" + cu.errormsg("E004");
+			cd.setLoginstatus(unam+"~FAIL"+"~"+cu.getemsg("E003"));
+			return "FAIL~" + cu.getemsg("E004");
 		}
 
 	}
@@ -96,6 +98,6 @@ public class ChatLoginHandler {
 
 
 	public static void main(String[] args) {
-		//System.out.println(errormsg("E001"));
+		//System.out.println(getemsg("E001"));
 	}
 }

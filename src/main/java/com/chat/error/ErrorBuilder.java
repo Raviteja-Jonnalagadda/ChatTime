@@ -10,29 +10,25 @@ public class ErrorBuilder {
 
 	protected static JSONObject erjob = new JSONObject();
 	private static ResourceBundle rb = ResourceBundle.getBundle("application");
-	
+	private static long erid = System.currentTimeMillis();
 	public static JSONObject ctaperrorbuilder(String ecod,String emsg) {
 		erjob.clear();
-		int erid = 0;
 		erjob.put("ecod", ecod);
 		erjob.put("emsg", emsg);
 		erjob.put("erid", erid);
 		erjob.put("Processed_By", (rb.getString("spring.application.name")!=null)?rb.getString("spring.application.name"):"Chat Time Application");
 		erjob.put("etim", getNow());
-		
 		return erjob;
 	}
 	
 	public static JSONObject ctaperrorbuilder(String ecod,String emsg,String esug) {
 		erjob.clear();
-		int erid = 0;
 		erjob.put("ecod", ecod);
 		erjob.put("emsg", emsg);
 		erjob.put("erid", erid);
+		erjob.put("esug", esug);
 		erjob.put("Processed_By", (rb.getString("spring.application.name")!=null)?rb.getString("spring.application.name"):"Chat Time Application");
 		erjob.put("etim", getNow());
-		
-		
 		return erjob;
 	}
 	

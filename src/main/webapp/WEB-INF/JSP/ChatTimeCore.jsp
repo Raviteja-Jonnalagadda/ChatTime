@@ -9,15 +9,18 @@
   <title>Chat Time Dashboard</title>
 <link href="<ct:url value='/resources/css/bashbord.css?v=<%= System.currentTimeMillis() %>' />" rel="stylesheet">
 <link href="<ct:url value='/resources/css/bashboard_mobile_768.css?v=<%= System.currentTimeMillis() %>' />" rel="stylesheet">
+<script src="<ct:url value='/resources/js/ChatTimeCoreDTO.js?v=<%= System.currentTimeMillis() %>' />"></script>
+
 <script>
     var contextPath = "<%= request.getContextPath() %>";
+    userId = "<%= (String) session.getAttribute("userid") %>";
 </script>
 </head>
 <body>
   <!-- Top Bar -->
   <div class="top-bar">
     <div>
-<img src="<ct:url value='/resources/images/chat_App_logo.jpg' />" alt="Logo">
+<img src="<ct:url value='/resources/images/ChatTime_Logo_5.png' />" alt="Logo">
       </div>
       <div>
       <span class="app-title">Chat Time</span>
@@ -32,6 +35,7 @@
    <div class="ctap-search">
   <div class="ctap-srtxt">
     <input type="text" id="ctap_id_search" class="ctap-id-search" placeholder="Search ID">
+    <div id="suggestion-box" class="suggestion-box"></div>
   </div>
   <div class="ctap-btn">
     <button id="ctap_id_search_btn" class="ctap-id-search-btn">🔍</button>
@@ -49,11 +53,26 @@
   </div>
 
   <!-- Footer -->
-  <div class="footer">
+ <!-- <div class="footer">
     <a href="#">Privacy Policy</a> | 
     <a href="#">Terms & Conditions</a>
-  </div>
+  </div> -->
 
+	<!-- Popup Messages -->
+	<div id="successPopup" class="popup success">
+		<span class="popup-msg">✔️ Success message</span>
+		<span class="popup-close" onclick="closePopup('successPopup')">&times;</span>
+	</div>
+
+	<div id="errorPopup" class="popup error">
+		<span class="popup-msg">❌ Error message</span>
+		<span class="popup-close" onclick="closePopup('errorPopup')">&times;</span>
+	</div>
+	<!-- Spinner Loader -->
+	<div id="chatSpinner" class="chat-spinner-wrapper">
+		<div class="chat-spinner"></div>
+	</div>
+	
 <script src="<ct:url value='/resources/js/jquery-3.7.1.min.js' />" ></script>
 <script src="<ct:url value='/resources/js/bashboard.js?v=<%= System.currentTimeMillis() %>' />"></script>
 <script src="<ct:url value='/resources/js/ChatApp_Utils.js?v=<%= System.currentTimeMillis() %>' />"></script>

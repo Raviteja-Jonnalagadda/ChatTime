@@ -14,7 +14,6 @@ public class QueryRepo {
 	private String mkr_id;
 	private String return_type;
 
-	// Getters and Setters
 	public String getqueryId() {
 		return queryId;
 	}

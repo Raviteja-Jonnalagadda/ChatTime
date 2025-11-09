@@ -1,7 +1,10 @@
 package com.chat.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,24 +27,55 @@ public class RedirectionController {
 	public String ctmsPage() {
 		return "ChatTimeCore";
 	}
- 
+
 	@GetMapping("/SucessLogin")
 	public String UnidentifiedLogin() {
 		return "error/unIdentifiedLogin";
 	}
-	
+
+	@GetMapping("/")
+	public String LoginPageRedirect() {
+		System.out.println("[RedirectionController] [LoginPageRedirect] Redirecting to the Login Page");
+		return "/Login/ChatLogin";
+	}
+
+	@GetMapping("/ChatTime")
+	public String LoginPageRedirectWithName() {
+		System.out.println("[RedirectionController] [LoginPageRedirect] Redirecting to the Login Page With ChatTime");
+		return "/Login/ChatLogin";
+	}
+
+	@PostMapping("/signin")
+	public String SigninPage() {
+		System.out.println("[RedirectionController] [LoginPageRedirect] Redirecting to the SignIn Page");
+		return "Login/ChatSignin";
+	}
+
+	@PostMapping("/ForgotPassword")
+	public String ForgotPasswordRedirect() {
+		System.out.println("[RedirectionController] [LoginPageRedirect] Redirecting to the ForgotPassword Page");
+		return "Login/ChatForgotPassword";
+	}
+
+	@GetMapping("/.well-known/appspecific/com.chrome.devtools.json")
+	@ResponseBody
+	public ResponseEntity<Void> chromeDevtools() {
+		return ResponseEntity.noContent().build();
+	}
+
 	@Autowired
 	public CommonDTO cd;
 
 	@PostMapping("/SucessLogin")
-	public String sucessLogin(@RequestParam("ctap_uid") String unm, @RequestParam("ctap_pwd") String pwd) {
+	public String sucessLogin(@RequestParam("ctap_uid") String unm, @RequestParam("ctap_pwd") String pwd, HttpSession session) {
 		System.out.println(unm);
-		String ckval = (cd.getLoginstatus()!=null)?cd.getLoginstatus():"NO_DATA";
+		String ckval = (cd.getLoginstatus() != null) ? cd.getLoginstatus() : "NO_DATA";
 		System.out.println("check : " + ckval);
 		System.out.println("the unnm name is -->  " + ckval.substring(0, unm.length()));
 		if (unm.equals(ckval.substring(0, unm.length()))) {
 			if (ckval.substring(unm.length() + 1).equals("DONE")) {
 				System.out.println("Sucess Login for --> " + unm);
+				session.setAttribute("userid", unm);
 				return "ChatTimeCore";
 			} else if (ckval.substring(0, unm.length() + 1).equals("FAIL")) {
 				System.err.println("FAIL Login for --> " + unm);
@@ -55,36 +89,41 @@ public class RedirectionController {
 			return "UnIdentifiedLogin";
 		}
 	}
-	
+
 	@PostMapping("/Page/AllRedirect")
 	@ResponseBody
 	public String AllRedirection(@RequestBody String jsonData) {
-		if(jsonData==null||jsonData.trim().isEmpty()) {
+		if (jsonData == null || jsonData.trim().isEmpty()) {
 			return "Invalid_Redirection";
 		}
 		JSONObject jo = new JSONObject();
-		try{ jo = new JSONObject(jsonData);}
-		catch(Exception e) {
-			System.err.println("[RedirectionController] [AllRedirection] Recived data is not a valid JSON --> "+jsonData+"  error is --> "+e.getMessage());
+		try {
+			jo = new JSONObject(jsonData);
+		} catch (Exception e) {
+			System.err.println("[RedirectionController] [AllRedirection] Recived data is not a valid JSON --> "
+					+ jsonData + "  error is --> " + e.getMessage());
 		}
-		if(!jo.has("pname")||!jo.has("pdata")) {
-			System.err.println("[RedirectionController] [AllRedirection] pname or pdata node is missing in the recived json -->  "+jo.toString(2));
+		if (!jo.has("pname") || !jo.has("pdata")) {
+			System.err.println(
+					"[RedirectionController] [AllRedirection] pname or pdata node is missing in the recived json -->  "
+							+ jo.toString(2));
 			return "UnIdentifiedLogin";
 		}
-		String pagename = jo.optString("pname","NO_DATA");
-		String passdata = jo.optString("pdata","NO_DATA");
-		if(pagename == null ||pagename.trim().isEmpty()||passdata==null||passdata.isEmpty()) {
-			System.err.println("[RedirectionController] [AllRedirection] Data is missing in the pname or pdata -->  "+jo.toString(2));
+		String pagename = jo.optString("pname", "NO_DATA");
+		String passdata = jo.optString("pdata", "NO_DATA");
+		if (pagename == null || pagename.trim().isEmpty() || passdata == null || passdata.isEmpty()) {
+			System.err.println("[RedirectionController] [AllRedirection] Data is missing in the pname or pdata -->  "
+					+ jo.toString(2));
 			return "Invalid_Redirection";
 		}
-		System.out.println("[RedirectionController] [AllRedirection] The recived pagename is ---> [ "+pagename+" ] "
-				+ " The data that need to pass to that page is ---> [ "+passdata+" ]");
-	    if(pagename.equals("Chats")||pagename.equals("Groups")||pagename.equals("Importent")||pagename.equals("Others")) {
+		System.out.println("[RedirectionController] [AllRedirection] The recived pagename is ---> [ " + pagename + " ] "
+				+ " The data that need to pass to that page is ---> [ " + passdata + " ]");
+		if (pagename.equals("Chats") || pagename.equals("Groups") || pagename.equals("Importent")
+				|| pagename.equals("Others")) {
 			cd.setPagetype(pagename);
 			cd.setPagedata(passdata);
 			return "chatlist";
-		}
-		else {
+		} else {
 			return "error/500";
 		}
 	}
@@ -92,21 +131,20 @@ public class RedirectionController {
 	@GetMapping("/chatlist")
 	public String showChatList() {
 		System.out.println("hii in the http://localhost:8111/chatlist");
-	    return "ctap_ChatList"; // matches your JSP filename: ctap_ChatList.jsp
+		return "ctap_ChatList"; // matches your JSP filename: ctap_ChatList.jsp
 	}
-	
+
 	@GetMapping("/CTAP_WelcomePage")
 	public String welcomepage() {
 		System.out.println("hii in the http://localhost:8111/chatlist");
-	    return "Welcome";
+		return "Welcome";
 	}
-	
+
 	public String IframeRedirection(@RequestParam String pid) {
 		String result = null;
-		
-		
+
 		return result;
-		
+
 	}
-	
+
 }

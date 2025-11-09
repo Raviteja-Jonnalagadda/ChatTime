@@ -86,8 +86,62 @@ async function CtapAjax(data, endpoint) {
     }
 }
 
+/**
+ * Show Success Message
+ */
+function showSuccess(message) {
+	if ($('#successPopup').length) {
+		$('#errorPopup').hide();
+		$('#successPopup .popup-msg').text('✔️ ' + message);
+		$('#successPopup').fadeIn().delay(1000).slideUp(1000);
+	} else {
+		console.log("Success popup not found in the DOM.");
+	}
+}
 
+/**
+ * Show Error Message
+ */
+function showError(message) {
+	$('#successPopup').hide();
+	$('#errorPopup .popup-msg').text('❌ ' + message);
+	$('#errorPopup').fadeIn().delay(5000).slideUp(1000);
+}
 
+/**
+ * Closes the Sucess or Error Message Popups
+ */
+function closePopup(id) {
+	$('#' + id).fadeOut();
+}
+
+/**
+ * Shows the Spiner for loading
+ */
+function showSpinner() {
+	$('#chatSpinner').css('display', 'flex');
+	$('#chatSpinner').fadeIn();
+}
+
+/**
+ * Hides the Spiner After loading
+ */
+function hideSpinner() {
+	$('#chatSpinner').css('display', 'none');
+	$('#chatSpinner').fadeOut();
+}
+
+/**
+ * Shows the Send Message PopUp for the Searched User in the Search Bar
+ */
+
+function SendMessage(CTID){
+	if(CTID.length==0){
+		showError('Chat Id is null Please enter the Valid ChatTime User ID for sending the message');
+		return false;
+	}
+	
+}
 
 
 

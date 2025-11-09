@@ -10,7 +10,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Map all /resources/** URLs to WEB-INF folder
         registry.addResourceHandler("/resources/**")
         .addResourceLocations("/WEB-INF/resources/");
     }

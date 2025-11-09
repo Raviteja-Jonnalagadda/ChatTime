@@ -42,6 +42,24 @@ $(document).ready(function() {
 	});
 
 
+	/**
+	 * Search Button Handler
+	 * It allowes the users to Search the other chatTime Users by there ChatTime ID or (User Id)
+	 */
+		
+	$('#ctap_id_search_btn').on('click').off('click',function(){
+		var SearchId = $('#ctap_id_search').val();
+		if(SearchId.length==0){
+			showError("Please Enter the User Id Befor Search");
+			return false;
+		}
+		let data = {CtId:SearchId}
+		let SearchStatus = CtapAjax(data,"SearchCTId");
+		if(SearchStatus === 'DONE'){
+			
+		}
+		
+	});
 
 
 

@@ -1,6 +1,7 @@
 package com.chat.db;
 
 import java.sql.*;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
@@ -215,6 +216,31 @@ public class DBConnecter {
 			close(rs, ps);
 			closeconnection(cn);
 		}
+	}
+	
+	public static PreparedStatement safequeryvaluesetter(String query, LinkedList<String> param_val, Connection c)
+			throws SQLException {
+		PreparedStatement ps = null;
+		int placeholderCount = 0;
+		
+		for (int i = 0; i < query.length(); i++) {
+			if (query.charAt(i) == '?') {
+				placeholderCount++;
+			}
+		}
+		if(param_val.size()==0 && placeholderCount ==0) {
+			ps = c.prepareStatement(query);
+		}
+		if (placeholderCount != param_val.size()) {
+			System.out.println("Paramater Count is missmatch");
+			return null;
+		} else {
+			ps = c.prepareStatement(query);
+			for (int i = 1; i <= placeholderCount; i++) {
+				ps.setString(i, param_val.get(i - 1));
+			}
+		}
+		return ps;
 	}
 
 	public static void main(String[] args) {

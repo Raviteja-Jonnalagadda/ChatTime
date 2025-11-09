@@ -31,7 +31,6 @@ function startOtpTimer() {
 		let seconds = timeLeft % 60;
 		let timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 		$('#otpTimer').text(timeStr);
-
 		timeLeft--;
 	}, 1000);
 }
@@ -105,7 +104,8 @@ function CheckChatTimeId(ctid) {
 						$('#ChatTimeId').css({ border: 'solid red 2px' });
 						console.log('[CheckChatTimeId] response is  FAIL');
 						resolve(false);
-					} else {
+					}
+					else {
 						$('#ChatTimeId').css({ border: 'solid red 2px' });
 						showError("Error in checking the ID please try again with changing the ID .");
 						console.log('[CheckChatTimeId] response is  FAIL');
@@ -128,13 +128,13 @@ function CheckChatTimeId(ctid) {
 		}
 	});
 }
-async function sendemailotp(emailid, name) {
+async function sendemailotp(emailid, name, sign) {
 	return new Promise((resolve, reject) => {
 		$.ajax({
 			method: 'POST',
 			url: '/SendOTPEmail',
 			data: {
-				mailtype: 'SIGNUPOTP',
+				mailtype: sign,
 				mailid: emailid,
 				Name: name
 			},
@@ -172,7 +172,7 @@ async function sendemailotp(emailid, name) {
 							if (verifyResponse === 'DONE') {
 								showSuccess("OTP verified successfully! .");
 								closeOtpPopup();
-								proceedWithSignup(otp); 
+								proceedWithSignup(otp);
 								resolve(true);
 							}
 							else if (verifyResponse === 'OTPMISSMATCH') {
@@ -226,36 +226,93 @@ async function proceedWithSignup(otp) {
 	let pswd = $("#Pword").val();
 	let pwht = $("#pwordhint").val();
 
-	let dt = { fnm: fnam, emd: emid, mbn: mbno, dob: dobr, ged: gend, ctid: ctid, pwd: pswd, pwh: pwht,sgnotp:otp };
-alert("in the proceedWithSignup ");
+	let dt = { fnm: fnam, emd: emid, mbn: mbno, dob: dobr, ged: gend, ctid: ctid, pwd: pswd, pwh: pwht, sgnotp: otp };
 	showSpinner();
-		await $.ajax({
-			method:'POST',
-			url:'/ChatTimeSignUp',
-			data:JSON.stringify(dt),
-			contentType: 'application/json',
-			success:function(response){
-				hideSpinner();
-				if(response == 'DONE'){
-					showSuccess("You Details are registred in ChatTime Sucessfully.");
-					window.location.href = "../html/ChatLogin.html";
-				}
-				else if(response == 'FAIL'){
-					showError("Issue while Regstring details .Kindly recheck all the details and try again .");
-				}
-			},
-			error(status,xhr,error){
-				hideSpinner();
-				console.log("[proceedWithSignup] status --->  "+status);
-				console.log("[proceedWithSignup] xhr    --->  "+xhr);
-				console.log("[proceedWithSignup] error  --->  "+error);
-				showError("Internal Issue happned while Regstring details .Kindly recheck all the details and try again .");
+	await $.ajax({
+		method: 'POST',
+		url: '/ChatTimeSignUp',
+		data: JSON.stringify(dt),
+		contentType: 'application/json',
+		success: function(response) {
+			hideSpinner();
+			console.log('[proceedWithSignup] response is '+response);
+			if (response == 'DONE') {
+				showSuccess("You Details are registred in ChatTime Sucessfully.");
+				window.location.href = "../html/ChatLogin.html";
+				return true;
 			}
-		});
+			else if (response.substring(0, 4) === "FAIL") {
+				console.log('')
+				var emsg = (response.substring(5) != null) ? response.substring(5) : "Issue while Regstring details .Kindly recheck all the details and try again .";
+				showError(emsg);
+				$('#mobileno').css({ border: 'solid red 2px' });
+				$('#emailid').css({ border: 'solid red 2px' });
+				return false;
+			}
+			else {
+				showError("Issue while Regstring details .Kindly recheck all the details and try again .");
+				return false;
+			}
+		},
+		error(status, xhr, error) {
+			hideSpinner();
+			console.log("[proceedWithSignup] status --->  " + status);
+			console.log("[proceedWithSignup] xhr    --->  " + xhr);
+			console.log("[proceedWithSignup] error  --->  " + error);
+			showError("Internal Issue happned while Regstring details .Kindly recheck all the details and try again .");
+			return false;
+		}
+	});
 	hideSpinner();
-
 }
 
+function ProcesWithForgotPassword(email, otp, password) {
+	if (!email || !otp || !password) {
+		showError("Please enter the new Password");
+		return false;
+	}
+
+	let val = { mail_id: email, new_otp: otp, pword: password };
+
+	showSpinner();
+
+	$.ajax({
+		method: 'POST',
+		url: '/ChangePassword',
+		data: val,
+		success: function(response) {
+			hideSpinner();
+
+			if (response === 'DONE') {
+				console.log('[ProcesWithForgotPassword] Ajax Response is DONE');
+				showSuccess("Password changed successfully. Please log in with your new password.");
+				// small delay so the user sees success message
+				setTimeout(() => {
+					window.location.href = "../html/ChatLogin.html";
+				}, 1500);
+			}
+			else if (response === 'FAIL') {
+				console.log('[ProcesWithForgotPassword] Ajax Response is FAIL');
+				showError("Something went wrong while resetting the password. Please try again.");
+				setTimeout(() => {
+					window.location.href = "../html/ChatForgotPassword.html";
+				}, 1500);
+			}
+			else if (response === 'NULVAL') {
+				showError("Please fill all fields before submitting.");
+			}
+			else {
+				console.warn('Unexpected response:', response);
+				showError("Unexpected error occurred.");
+			}
+		},
+		error: function(xhr, status, error) {
+			hideSpinner();
+			console.error('[ProcesWithForgotPassword] AJAX Error:', error);
+			showError("Network error. Please try again later.");
+		}
+	});
+}
 
 
 $(document).ready(function() {
@@ -302,14 +359,16 @@ $(document).ready(function() {
 	 * Forgot Password Page
 	 */
 
-	$('#ctap_sendotp').on('click', function() {
-		let email = $('#ctap_emailid').val();
-		if (!email) {
+	$('#ctap_sendotp').on('click', async function() {
+		let emailid = $('#ctap_emailid').val();
+		if (!emailid) {
 			showError("Please enter the email for getting the OTP");
 			return false;
 		}
-		let dt = { mailtype: 'ForgotPasswordOTP', mailid: email, Name: "CHATTIME USER" }
-		$.ajax({
+		showSpinner();
+
+		let dt = { mailtype: 'ForgotPasswordOTP', mailid: emailid, Name: "CHATTIME USER" }
+		await $.ajax({
 			method: 'POST',
 			url: '/SendOTPEmail',
 			data: dt,
@@ -318,21 +377,93 @@ $(document).ready(function() {
 				console.log('[ForgotPassword Page OTP Status] --->  ' + response);
 				if (response == 'DONE') {
 					showSuccess("OTP Has been send to your Email Id Please enter it below .");
-					$('.ctap-new-password').css({ display: 'block' });
+					openOtpPopup();
+
+					// Setup click handler for Verify OTP button
+					$('#verifyOtpBtn').off('click').on('click', async function() {
+						let otp = $('#otpInput').val();
+
+						if (otp.length !== 6 || isNaN(otp)) {
+							showError("Please enter a valid 6-digit OTP.");
+							return;
+						}
+						let dt = { sign: 'ForgotPasswordOTP', otp_val: otp, email: emailid };
+						try {
+							showSpinner();
+							const verifyResponse = await $.ajax({
+								method: 'POST',
+								url: '/VerifyOTP',
+								data: dt
+							});
+							hideSpinner();
+							if (verifyResponse === 'DONE') {
+								showSuccess("OTP verified successfully! .");
+								closeOtpPopup();
+								ForGotPasswordOTP = otp;
+								ForGotPasswordEmail = emailid;
+								$('#ctap_forgotpass_sub').css({ display: 'block' });
+								$(".ctap-new-password").css({ display: 'block' });
+								$("#ctap_emailid").prop("disabled", true);
+								$("#ctap_sendotp").css({ display: 'none' });
+								return true;
+							}
+							else if (verifyResponse === 'OTPMISSMATCH') {
+								showError("Invalid OTP. Please try again With a Valid OTP");
+								return false;
+							}
+							else if (verifyResponse === 'OTPTIMEOUT') {
+								showError("Time Out. Need to enter the OTP with in 5 min ");
+								return false;
+							}
+							else if (verifyResponse === 'FAIL') {
+								showError("Internal Error happned while Verifing the OTP . Please try again with the valid OTP");
+								return false;
+							}
+							else {
+								showError("Unexpected Error Happned while Verifing the OTP please try again");
+								return false;
+							}
+						} catch (err) {
+							hideSpinner();
+							console.error("OTP Verification failed: ", err);
+							showError("Error verifying OTP. Please try again.");
+							return false;
+						}
+					});
 				}
 				else if (response == 'NO') {
 					showError("The given email id is not Registred with the ChatTime . Kindly recheck the EmailId and try again");
+					return false;
 				}
 				else {
 					showError("Error While Sending the OTP . Please try again .");
+					return false;
 				}
 			},
 			error(error, xhr, status) {
 				hideSpinner();
 				console.log("[ForgotPassword Page OTP Status] error is --->  " + error);
 				showError("Unexpected Error while sending the OTP Please try after some time .");
+				return false;
 			}
 		});
+
+
+	});
+
+	$('#ctap_forgotpass_sub').on('click', function() {
+		let newpassword = $('#ctap_new_pwd').val();
+		if (!newpassword) {
+			showError('Please Enter the New password and Submit');
+			return false;
+		}
+
+		let storenewpassword = ProcesWithForgotPassword(ForGotPasswordEmail, ForGotPasswordOTP, newpassword);
+		if (storenewpassword) {
+
+		} else {
+			showError('Error In Updating the OTP Please try again');
+		}
 
 
 	});
@@ -341,6 +472,7 @@ $(document).ready(function() {
 	$('#ctap_signin_submit').on('click', async function() {
 		if (!signin) {
 			showError("Please enter all the values ");
+			return false;
 		}
 		else {
 			let fnam = $("#FullName").val();
@@ -351,7 +483,6 @@ $(document).ready(function() {
 			let ctid = $("#ChatTimeId").val();
 			let pswd = $("#Pword").val();
 			let pwht = $("#pwordhint").val();
-			let sotp = "123456";
 
 			let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			let phoneRegex = /^[6-9]\d{9}$/;
@@ -359,42 +490,41 @@ $(document).ready(function() {
 			if (fnam.trim() && emid.trim() && dobr.trim() && mbno.trim() && gend && ctid.trim() && pswd.trim() && pwht.trim()) {
 				if (!emailRegex.test(emid)) {
 					showError("Please enter a valid email address.");
+					return false;
 				}
 				else if (!phoneRegex.test(mbno)) {
 					showError("Please enter a valid 10-digit mobile number.");
+					return false;
 				}
 				else {
 					showSpinner();
-					let emailstatus = await sendemailotp(emid, fnam);
+					let checkuser = await sendemailotp(emid, fnam, 'SIGNUPOTP');
+					hideSpinner();
+					showSpinner();
+					let emailstatus = await sendemailotp(emid, fnam, 'SIGNUPOTP');
 					hideSpinner();
 					if (!emailstatus) {
 						showError("Error In OTP verification Please try again");
 						return false;
 					} else {
-						/*alert("Started the Registracting a customer In DB ");
-						let data = { fnm: fnam, emd: emid, mbn: mbno, dob: dobr, ged: gend, ctid: ctd, pwd: pswd, pwh: pwht, otp: sotp }
-						console.log("[ctap_signin_submit] [Onclick] The data sedning to ajax is -->  " + data);
-						alert("[ctap_signin_submit] [Onclick] The data sedning to ajax is -->  " + data);
-						showSpinner();
-						let DetailsStore = await CtapAjax(data, "ChatTimeSignUp");
-						alert("[ctap_signin_submit] [Onclick] Result of storing is -->  " + DetailsStore);
-						hideSpinner();
-						alert("Thanks For sigin up");*/
+						console.log('[ctap_signin_submit] [Onclick] in the else condition');
+						return true;
 					}
 				}
 			}
 			else {
 				showError("Please Enter all the values");
+				return false;
 			}
 		}
-});
-	
+	});
+
 
 	$('#ctap_submit').on('click', function() {
 		const uid = $('#ctap_uid').val().trim();
 		const pwd = $('#ctap_pwd').val().trim();
 
-		if (!uid || !pwd) { 
+		if (!uid || !pwd) {
 			showError("Please enter both User ID and Password.");
 		} else {
 			let ldata = {
@@ -418,9 +548,7 @@ $(document).ready(function() {
 						$('#ct_login_form').submit();
 					}
 					else if (signval === 'FAIL') {
-						let val = JSON.parse(response.substring(5));
-						console.log("val -->  [ " + JSON.stringify(val) + " ]");
-						let ermsg = val.emessage;
+						let ermsg = response.substring(5)
 						console.log("the error message is --->  [ " + ermsg + " ]");
 						showError(ermsg);
 					}
