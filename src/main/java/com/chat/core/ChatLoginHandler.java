@@ -1,7 +1,6 @@
 package com.chat.core;
 
 import java.time.LocalDateTime;
-
 //import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;

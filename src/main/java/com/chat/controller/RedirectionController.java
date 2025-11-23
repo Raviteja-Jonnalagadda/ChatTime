@@ -67,7 +67,8 @@ public class RedirectionController {
 	public CommonDTO cd;
 
 	@PostMapping("/SucessLogin")
-	public String sucessLogin(@RequestParam("ctap_uid") String unm, @RequestParam("ctap_pwd") String pwd, HttpSession session) {
+	public String sucessLogin(@RequestParam("ctap_uid") String unm, @RequestParam("ctap_pwd") String pwd,
+			HttpSession session) {
 		System.out.println(unm);
 		String ckval = (cd.getLoginstatus() != null) ? cd.getLoginstatus() : "NO_DATA";
 		System.out.println("check : " + ckval);
@@ -123,7 +124,11 @@ public class RedirectionController {
 			cd.setPagetype(pagename);
 			cd.setPagedata(passdata);
 			return "chatlist";
+		} else if (pagename.equalsIgnoreCase("ctap_msg")) {
+			System.out.println("[RedirectionController] [AllRedirection] ChatTime Id is -->  [ " + passdata + " ] .");
+			return "ctapmsg";
 		} else {
+			System.out.println("[RedirectionController] [AllRedirection] Unknown Page Redirection requested ");
 			return "error/500";
 		}
 	}
@@ -132,6 +137,12 @@ public class RedirectionController {
 	public String showChatList() {
 		System.out.println("hii in the http://localhost:8111/chatlist");
 		return "ctap_ChatList"; // matches your JSP filename: ctap_ChatList.jsp
+	}
+
+	@GetMapping("/ctapmsg")
+	public String showChatMessage() {
+		System.out.println("hii in the http://localhost:8111/chatmsg");
+		return "ctap_msg";
 	}
 
 	@GetMapping("/CTAP_WelcomePage")

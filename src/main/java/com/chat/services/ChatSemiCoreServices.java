@@ -32,18 +32,23 @@ public class ChatSemiCoreServices {
 				PreparedStatement ps = DBConnecter.safequeryvaluesetter(query, data, c);
 				ResultSet rs = ps.executeQuery();) {
 			JSONArray jar = new JSONArray();
-			if (rs.next()) {
-				for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
-					jar.put(rs.getString(i));
-					sdatacnt++;
-				}
-				finaldata.put("status", "DONE");
-				finaldata.put("sdata_cnt", sdatacnt);
-				finaldata.put("Suggestion_data", jar);
+			while (rs.next()) {
+			    JSONObject row = new JSONObject();   
+			    for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+			        String colName = rs.getMetaData().getColumnLabel(i);
+			        row.put(colName, rs.getString(i));
+			    }
+			    jar.put(row);
+			    sdatacnt++;
+			}
+			if (sdatacnt > 0) {
+			    finaldata.put("status", "DONE");
+			    finaldata.put("sdata_cnt", sdatacnt);
+			    finaldata.put("Suggestion_data", jar);
 			} else {
-				finaldata.put("status", "NLDT");
-				finaldata.put("sdata_cnt", sdatacnt);
-				finaldata.put("Suggestion_data", "NO_RCD_FND");
+			    finaldata.put("status", "NLDT");
+			    finaldata.put("sdata_cnt", 0);
+			    finaldata.put("Suggestion_data", "NO_RCD_FND");
 			}
 		} catch (Exception e) {
 			System.out.println(

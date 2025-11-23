@@ -50,12 +50,17 @@ $(document).ready(function() {
 	 * Chat Person click handler
 	 *              Activites when any of the chat is clicked and thake the value (chat name) and stores into the localstorage and the called the IframeHandler to redirect to the ctap_msg page
 	 */
-	$(".ctap-chatlist").on('click', function() {
+	$(".ctap-chatlist").on('click', async function() {
 		console.log('[ChatList] [ctap-chatlist] [click] In the on click function for the ctap-chatlist class (<div>) ');
 		let person_id = $(this).attr('value');
 		console.log('[ChatList] [ctap-chatlist] [click] the selected chat id is --> [ ' + person_id + ' ]');
 		localStorage.setItem('chat_person_id', person_id);
-		IframeHandler('/ctap_msg.html', 'Chats');
+		let data = { pname: 'ctap_msg', pdata: person_id };
+		let pageurl='/Page/AllRedirect';
+		const url = await CtapAjax(data, pageurl);
+		console.log('[ChatList] The Ajax Response or redirection URL is --->   ' + url);
+		let val='chatmsg';
+		IframeHandler(url, val);
 	});
 });
 

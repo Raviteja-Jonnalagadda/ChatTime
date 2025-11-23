@@ -6,6 +6,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
   <title>Chat Time Dashboard</title>
 <link href="<ct:url value='/resources/css/bashbord.css?v=<%= System.currentTimeMillis() %>' />" rel="stylesheet">
 <link href="<ct:url value='/resources/css/bashboard_mobile_768.css?v=<%= System.currentTimeMillis() %>' />" rel="stylesheet">
@@ -38,8 +41,9 @@
     <div id="suggestion-box" class="suggestion-box"></div>
   </div>
   <div class="ctap-btn">
-    <button id="ctap_id_search_btn" class="ctap-id-search-btn">🔍</button>
+  <input type="button"id="ctap_id_search_btn" value="🔍" class="ctap-id-search-btn">
   </div>
+    <div id=Search_Sugg class="ctap-search-sugg"></div>
 </div>
   <!-- Main Layout -->
   <div class="main-container">

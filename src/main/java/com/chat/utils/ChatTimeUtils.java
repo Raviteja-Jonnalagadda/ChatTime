@@ -1,5 +1,8 @@
 package com.chat.utils;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ChatTimeUtils {
 
 	@SuppressWarnings("unused")

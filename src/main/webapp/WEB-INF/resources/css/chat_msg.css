@@ -1,0 +1,157 @@
+    body {
+    	display: block;
+    	margin: 0;
+    }
+
+    .chat-container {
+    	max-width: 100%;
+    	margin: 0 auto;
+    	flex-grow: 1;
+    	overflow: auto;
+    	margin-top: 4%;
+    	margin-bottom: 4%;
+    	overflow-y: auto;
+
+    }
+
+    .message {
+    	display: flex;
+    	margin: 10px 0;
+    }
+
+    .message.left {
+    	justify-content: flex-start;
+    }
+
+    .message.right {
+    	justify-content: flex-end;
+    }
+
+    .message-box {
+    	max-width: 70%;
+    	padding: 10px 15px;
+    	border-radius: 25px;
+    	background-color: #ffffff;
+    }
+
+    .left .message-box {
+    	background-color: #ebebeb;
+    	text-align: left;
+    	border-bottom-right-radius: 0;
+    	padding: 10px;
+    	width: auto;
+    	white-space: normal;
+    	overflow-wrap: break-word;
+    	word-break: normal;
+    	display: block;
+    	height: auto;
+    	border: dotted 3px #59e1f8;
+    }
+
+    .right .message-box {
+    	background-color: #8ad6f4;
+    	text-align: left;
+    	border-bottom-right-radius: 0;
+    	padding: 10px;
+    	width: auto;
+    	white-space: normal;
+    	overflow-wrap: break-word;
+    	word-break: normal;
+    	display: block;
+    	height: auto;
+    	margin-right: 7px;
+    }
+
+    #msg_right:hover {
+    	background-color: #c8f3f7;
+    	border-radius: 20px;
+    }
+
+    #msg_left:hover {
+    	background-color: #c8f3f7;
+    	border-radius: 20px;
+    }
+
+    .ctap-usr-info {
+    	display: flex;
+    	position: fixed;
+    	width: 99%;
+    	/* justify-content: space-between; /* pushes items to the edges */
+    	align-items: center;
+    	/* vertically center if needed */
+    	background: linear-gradient(45deg, #9ce3ff, #69a1f9);
+    	border-radius: 20px;
+    }
+
+    .ctap-usr-avtr-img {
+    	width: 50px;
+    	border-radius: 50px;
+    }
+
+    .ctap-usr-nm {
+    	font-size: 20px;
+    	margin-left: 5%;
+    }
+
+    .ctap-usr-status {
+    	margin: 10px;
+    }
+
+    /* Container fixed at bottom */
+    .ctap-msg-typ {
+    	position: fixed;
+    	bottom: 0;
+    	left: 0;
+    	width: 100%;
+    	display: flex;
+    	flex-wrap: wrap;
+    	justify-content: center;
+    	align-items: center;
+    	gap: 10px;
+    	/*padding: 10px; */
+    	background-color: #e6f2ff;
+    	/* Light blue background */
+    	border-top: 1px solid #b3d9ff;
+    	box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    	z-index: 1000;
+    }
+
+    /* Text input */
+    .ctap-mtp-txt {
+    	flex: 1;
+    	min-width: 200px;
+    	padding: 12px 16px;
+    	border: 1px solid #b3d9ff;
+    	border-radius: 6px;
+    	font-size: 16px;
+    	outline: none;
+    	background-color: #ffffff;
+    	transition: border 0.3s;
+    }
+
+    .ctap-mtp-txt:focus {
+    	border-color: #66b3ff;
+    }
+
+    /* Button */
+    .ctap-mtp-btn {
+    	flex: 1;
+    	padding: 12px 24px;
+    	background-color: #66b3ff;
+    	color: #fff;
+    	border: none;
+    	border-radius: 6px;
+    	font-size: 16px;
+    	cursor: pointer;
+    	transition: background-color 0.3s;
+    }
+
+    .ctap-mtp-btn:hover {
+    	background-color: #3399ff;
+    }
+
+    .master-div {
+    	display: flex;
+    	flex-direction: column;
+    	height: 100vh;
+    }

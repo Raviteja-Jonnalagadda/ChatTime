@@ -1,0 +1,15 @@
+@media(max-width:786px){
+.chat-container {
+    max-width: 100%;
+    margin: 0 auto;
+    flex-grow: 1;
+    overflow: auto;
+    overflow-y: auto;
+    margin-top: 12%;
+    margin-bottom: 12%;
+  }
+  .ctap-usr-avtr-img {
+      	width: 30px;
+      	border-radius: 50px;
+      }
+}
